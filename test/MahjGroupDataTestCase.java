@@ -16,7 +16,14 @@ public class MahjGroupDataTestCase extends TestCase {
 	
 	public void testMatchType() {
 		mGroupData = new MahjGroupData(0, getMahjDatas(TEST_DATA[0]));
-		assertEquals(10, mGroupData.getMatchTypeForData(new MahjData(12)));
+		mGroupData.updateMatchType(new MahjData(12));
+		assertEquals(10, mGroupData.getMatchType());
+	}
+	
+	public void test_MatchType_feng() {
+		mGroupData = new MahjGroupData(0, getMahjDatas(TEST_DATA[0]));
+		mGroupData.updateMatchType(new MahjData(43));
+		assertEquals(100, mGroupData.getMatchType());
 	}
 	
 	public void testOutData() {

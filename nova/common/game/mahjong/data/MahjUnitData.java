@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class MahjUnitData {
 
-	public ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
+	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private HashMap<Integer, ArrayList<Integer>> mUnitInfos = new HashMap<Integer, ArrayList<Integer>>();
 	
 	public void add(MahjData data) {

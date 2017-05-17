@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MahjGroupData {
+	// 0万1条2筒3东4中5GOD
+	private static final int GROUP_ID_MAX = 5;
 	private int mPlayerId;
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private ArrayList<MahjData> mMatchDatas = new ArrayList<MahjData>();
@@ -171,7 +173,7 @@ public class MahjGroupData {
 		}
 		
 		String message = "P(" + mPlayerId + ")\n";
-		for (int i = 0; i < mUnitDatas.size(); i++) {
+		for (int i = 0; i < GROUP_ID_MAX; i++) {
 			if (mUnitDatas.get(i) == null) {
 				continue;
 			}
@@ -182,7 +184,7 @@ public class MahjGroupData {
 	}
 	
 	private void addDataToUnit(MahjData data) {
-		int groupId = data.isGod() ? 5 : data.getColor();
+		int groupId = data.isGod() ? GROUP_ID_MAX : data.getColor();
 		if (mUnitDatas.get(groupId) == null) {
 			mUnitDatas.put(groupId, new MahjUnitData());
 		}
