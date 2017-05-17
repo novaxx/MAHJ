@@ -4,7 +4,7 @@ import org.junit.Test;
 import junit.framework.TestCase;
 import nova.common.game.mahjong.MahjManager;
 
-public class MahjManagerTest extends TestCase {
+public class MahjManagerTestCase extends TestCase {
 
 	private MahjManager mManager;
 	

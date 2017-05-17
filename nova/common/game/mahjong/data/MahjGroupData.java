@@ -84,6 +84,10 @@ public class MahjGroupData {
 		return data;
 	}
 	
+	/*
+	 * 万／千／百／十／个
+	 * 胡／听／杆／碰／吃
+	 */
 	public int getMatchType() {
 		return mMatchType;
 	}
@@ -94,25 +98,6 @@ public class MahjGroupData {
 		} else {
 			mMatchType = getMatchTypeForData(data);
 		}
-	}
-	
-	/**
-	 * 
-	 * @param data : outData
-	 * @return
-	 * 个位: 不要
-	 * 十位: 杆
-	 * 百位：碰
-	 * 千位：吃
-	 * 万位：胡
-	 */
-	public int getMatchTypeForData(MahjData data) {
-		int groupId = data.getColor();
-		if (mUnitDatas.get(groupId) != null) {
-			return mUnitDatas.get(groupId).getMatchType(data);
-		}
-		
-		return 0;
 	}
 	
 	public boolean removeData(MahjData data) {
@@ -127,6 +112,19 @@ public class MahjGroupData {
 		updateGroupData();
 		
 		return isSuccess;
+	}
+
+	/*
+	 * 万／千／百／十／个
+	 * 胡／听／杆／碰／吃
+	 */
+	private int getMatchTypeForData(MahjData data) {
+		int groupId = data.getColor();
+		if (mUnitDatas.get(groupId) != null) {
+			return mUnitDatas.get(groupId).getMatchType(data);
+		}
+		
+		return 0;
 	}
 	
 	private void updateGroupData() {
@@ -172,15 +170,23 @@ public class MahjGroupData {
 			addDataToUnit(data);
 		}
 		
-		String message = "P(" + mPlayerId + ")\n";
 		for (int i = 0; i < GROUP_ID_MAX; i++) {
 			if (mUnitDatas.get(i) == null) {
 				continue;
 			}
 			mUnitDatas.get(i).updateUnitInfo();
+		}
+		
+		/*----添加LOG打印----begin----*/
+		String message = "P(" + mPlayerId + ")\n";
+		for (int i = 0; i < GROUP_ID_MAX; i++) {
+			if (mUnitDatas.get(i) == null) {
+				continue;
+			}
 			message = message + i + "-{" + mUnitDatas.get(i).toString() + "}"; 
 		}
 		// android.util.Log.e("zhangxx", message);
+		/*----添加LOG打印----end----*/
 	}
 	
 	private void addDataToUnit(MahjData data) {

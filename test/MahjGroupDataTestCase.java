@@ -15,30 +15,20 @@ public class MahjGroupDataTestCase extends TestCase {
 	private MahjGroupData mGroupData;
 	
 	public void testMatchType() {
-		mGroupData = new MahjGroupData(0, getMahjDatas(TEST_DATA[0]));
+		mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(TEST_DATA[0]));
 		mGroupData.updateMatchType(new MahjData(12));
-		assertEquals(10, mGroupData.getMatchType());
+		assertEquals(110, mGroupData.getMatchType());
 	}
 	
 	public void test_MatchType_feng() {
-		mGroupData = new MahjGroupData(0, getMahjDatas(TEST_DATA[0]));
+		mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(TEST_DATA[0]));
 		mGroupData.updateMatchType(new MahjData(43));
-		assertEquals(100, mGroupData.getMatchType());
+		assertEquals(10, mGroupData.getMatchType());
 	}
 	
 	public void testOutData() {
-		mGroupData = new MahjGroupData(0, getMahjDatas(TEST_DATA[0]));
+		mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(TEST_DATA[0]));
 		mGroupData.setLatestData(new MahjData(3));
 		assertEquals(3, mGroupData.getAutoOutData().getIndex());
-	}
-	
-	private ArrayList<MahjData> getMahjDatas(String data) {
-		ArrayList<MahjData> mMahjDatas = new ArrayList<MahjData>();
-		String datas[] = data.split(",");
-		for (int i = 0; i < datas.length; i++) {
-			mMahjDatas.add(new MahjData(Integer.valueOf(datas[i])));
-		}
-		
-		return mMahjDatas;
 	}
 }

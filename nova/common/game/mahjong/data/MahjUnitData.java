@@ -8,6 +8,10 @@ public class MahjUnitData {
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private HashMap<Integer, ArrayList<Integer>> mUnitInfos = new HashMap<Integer, ArrayList<Integer>>();
 	
+	public void addAll(ArrayList<MahjData> datas) {
+		mDatas.addAll(datas);
+	}
+	
 	public void add(MahjData data) {
 		mDatas.add(data);
 	}
@@ -42,28 +46,23 @@ public class MahjUnitData {
 		return mDatas.get(0);
 	}
 	
-	/**
-	 * 
-	 * @param data
-	 * @return
-	 * 个位: 不要
-	 * 十位: 杆
-	 * 百位：碰
-	 * 千位：吃
-	 * 万位：胡
+	/*
+	 * 百／十／个
+	 * 杆／碰／-
 	 */
 	public int getMatchType(MahjData data) {
 		int gan = 0;
 		int peng = 0;
 		if (mUnitInfos.get(3) != null && mUnitInfos.get(3).contains(data.getIndex())) {
 			gan = 1;
+			peng = 1;
 		}
 		
 		if (mUnitInfos.get(2) != null && mUnitInfos.get(2).contains(data.getIndex())) {
 			peng = 1;
 		}
 		
-		return peng * 100 + gan * 10;
+		return gan * 100 + peng * 10;
 	}
 	
 	public String toString() {
