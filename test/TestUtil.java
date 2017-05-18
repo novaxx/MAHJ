@@ -9,6 +9,9 @@ public class TestUtil {
 		ArrayList<MahjData> mMahjDatas = new ArrayList<MahjData>();
 		String datas[] = data.split(",");
 		for (int i = 0; i < datas.length; i++) {
+			if (datas[i].isEmpty()) {
+				continue;
+			}
 			mMahjDatas.add(new MahjData(Integer.valueOf(datas[i])));
 		}
 

@@ -85,6 +85,7 @@ public class MahjGroupData {
 	}
 	
 	/*
+	 * @return
 	 * 万／千／百／十／个
 	 * 胡／听／杆／碰／吃
 	 */
@@ -174,7 +175,7 @@ public class MahjGroupData {
 			if (mUnitDatas.get(i) == null) {
 				continue;
 			}
-			mUnitDatas.get(i).updateUnitInfo();
+			mUnitDatas.get(i).updateUnitDataInfo();
 		}
 		
 		/*----添加LOG打印----begin----*/
@@ -205,7 +206,7 @@ public class MahjGroupData {
 	    	}
 	    	
 	    	if (groupId == -1 || 
-	    			mUnitDatas.get(i).size() < mUnitDatas.get(groupId).size()) {
+	    			mUnitDatas.get(i).grade() < mUnitDatas.get(groupId).grade()) {
 	    		groupId = i;
 	    	}
 	    }

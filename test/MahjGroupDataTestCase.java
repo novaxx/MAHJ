@@ -1,7 +1,5 @@
 package test;
 
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGroupData;

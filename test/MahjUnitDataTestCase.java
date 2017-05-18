@@ -10,6 +10,27 @@ public class MahjUnitDataTestCase extends TestCase {
 			"33,33,33,32,31,31"
 	};
 	
+	private static final String[][] TEST_MATCH_DATA = {
+			{"0", "", "13"},
+			{"110", "12,12,12,11,13,13,15", "12"},
+			{"10", "12,12,12,11,13,13,15", "13"},
+			{"110", "33,33,33,32,31,31", "33"},
+			{"10", "33,33,33,32,31,31", "31"}
+	};
+	
+	private static final String[][] TEST_GRADE_DATA = {
+			{"0", ""},
+			{"1", "42"},
+			{"5", "12,13,15,16,18"},
+			{"5", "1,2,3,5,7"},
+			{"4", "13,13,13,11"},
+			{"4", "22,22,22,22"},
+	};
+	
+	private static final String[] TEST_DEMAND_DATA = {
+			"43",
+	};
+	
 	private MahjUnitData mUnitData;
 	
 	public void test_add() {
@@ -24,36 +45,26 @@ public class MahjUnitDataTestCase extends TestCase {
 		assertEquals(7, mUnitData.size());
 	}
 	
-	public void test_matchType_empty() {
-		mUnitData = new MahjUnitData();
-		assertEquals(0, mUnitData.getMatchType(new MahjData(13)));
+	public void test_matchType() {
+		for (int i = 0; i < TEST_MATCH_DATA.length; i++) {
+			mUnitData = new MahjUnitData();
+			mUnitData.addAll(TestUtil.getMahjDatas(TEST_MATCH_DATA[i][1]));
+			mUnitData.updateUnitDataInfo();
+			assertEquals((int)Integer.valueOf(TEST_MATCH_DATA[i][0]), 
+					mUnitData.getMatchType(new MahjData(Integer.valueOf(TEST_MATCH_DATA[i][2]))));
+		}
 	}
 	
-	public void test_matchType_gan() {
-		mUnitData = new MahjUnitData();
-		mUnitData.addAll(TestUtil.getMahjDatas(TEST_DATA[0]));
-		mUnitData.updateUnitInfo();
-		assertEquals(110, mUnitData.getMatchType(new MahjData(12)));
+	public void test_getGrade() {
+		for (int i = 0; i < TEST_GRADE_DATA.length; i++) {
+			mUnitData = new MahjUnitData();
+			mUnitData.addAll(TestUtil.getMahjDatas(TEST_GRADE_DATA[i][1]));
+			mUnitData.updateUnitDataInfo();
+			assertEquals((int)Integer.valueOf(TEST_GRADE_DATA[i][0]), mUnitData.grade());
+		}
 	}
 	
-	public void test_matchType_peng() {
+	public void test_getDemandDatas() {
 		mUnitData = new MahjUnitData();
-		mUnitData.addAll(TestUtil.getMahjDatas(TEST_DATA[0]));
-		mUnitData.updateUnitInfo();
-		assertEquals(10, mUnitData.getMatchType(new MahjData(13)));
-	}
-	
-	public void test_matchType_feng_gan() {
-		mUnitData = new MahjUnitData();
-		mUnitData.addAll(TestUtil.getMahjDatas(TEST_DATA[1]));
-		mUnitData.updateUnitInfo();
-		assertEquals(110, mUnitData.getMatchType(new MahjData(33)));
-	}
-	
-	public void test_matchType_feng_peng() {
-		mUnitData = new MahjUnitData();
-		mUnitData.addAll(TestUtil.getMahjDatas(TEST_DATA[1]));
-		mUnitData.updateUnitInfo();
-		assertEquals(10, mUnitData.getMatchType(new MahjData(31)));
 	}
 }

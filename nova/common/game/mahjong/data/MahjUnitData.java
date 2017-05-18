@@ -7,6 +7,7 @@ public class MahjUnitData {
 
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private HashMap<Integer, ArrayList<Integer>> mUnitInfos = new HashMap<Integer, ArrayList<Integer>>();
+	private int mGrade;
 	
 	public void addAll(ArrayList<MahjData> datas) {
 		mDatas.addAll(datas);
@@ -20,26 +21,14 @@ public class MahjUnitData {
 		return mDatas.size();
 	}
 	
-	public void updateUnitInfo() {
-		mUnitInfos.clear();
-		int count = 0;
-		int index = -1;
-		for (int i = 0; i < mDatas.size(); i++) {
-			if (index == mDatas.get(i).getIndex()) {
-				count++;
-			} else {
-				if (index != -1) {
-					setUnitInfo(count, index);
-				}
-				
-				index = mDatas.get(i).getIndex();
-				count = 1;
-			}
-			
-			if (i == mDatas.size() - 1) {
-				setUnitInfo(count, index);
-			}
-		}
+	public int grade() {
+		return mGrade;
+	}
+	
+	public void updateUnitDataInfo() {
+		updateUnitInfo();
+		
+		mGrade = mDatas.size();
 	}
 	
 	public MahjData getOutData() {
@@ -55,7 +44,6 @@ public class MahjUnitData {
 		int peng = 0;
 		if (mUnitInfos.get(3) != null && mUnitInfos.get(3).contains(data.getIndex())) {
 			gan = 1;
-			peng = 1;
 		}
 		
 		if (mUnitInfos.get(2) != null && mUnitInfos.get(2).contains(data.getIndex())) {
@@ -63,6 +51,12 @@ public class MahjUnitData {
 		}
 		
 		return gan * 100 + peng * 10;
+	}
+	
+	public ArrayList<MahjDemandData> getDemandDatas() {
+		ArrayList<MahjDemandData> mDatas = new ArrayList<MahjDemandData>();
+		
+		return mDatas;
 	}
 	
 	public String toString() {
@@ -82,6 +76,21 @@ public class MahjUnitData {
 			}
 		}
 		return message;
+	}
+	
+	private void updateUnitInfo() {
+		mUnitInfos.clear();
+		int count = 0;
+		int index = -1;
+		for (int i = 0; i < mDatas.size(); i++) {
+			if (index == mDatas.get(i).getIndex()) {
+				count++;
+			} else {
+				index = mDatas.get(i).getIndex();
+				count = 1;
+			}
+			setUnitInfo(count, index);
+		}
 	}
 	
 	private void setUnitInfo(int count, int order) {
