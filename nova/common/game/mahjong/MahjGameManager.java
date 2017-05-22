@@ -19,6 +19,7 @@ public class MahjGameManager implements StageCallBack {
 	public void onStageEnd(int stage) {
 		switch (stage) {
 		case MahjGameStage.GET_MAHJ_GOD:
+			mMahjManager.updateGodData();
 			mGameData.setGod(mMahjManager.getGodData());
 			break;
 		

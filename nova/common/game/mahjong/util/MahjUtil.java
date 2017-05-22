@@ -9,8 +9,4 @@ public class MahjUtil {
 	public static int getMahjFace(int index) {
 		return index % 10;
 	}
-	
-	public static boolean isGodMahj(int index, int god) {
-		return index == god;
-	}
 }

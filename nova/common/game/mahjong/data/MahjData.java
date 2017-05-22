@@ -10,13 +10,11 @@ public class MahjData {
 	 */
 	private int color;
 	private int face;
-	private boolean god;
 	
 	public MahjData(int index) {
 		this.index = index;
 		this.color = MahjUtil.getMahjColr(this.index);
 		this.face = MahjUtil.getMahjFace(this.index);
-		this.god = MahjUtil.isGodMahj(this.index, -1);
 	}
 	
 	public int getIndex() {
@@ -29,9 +27,5 @@ public class MahjData {
 	
 	public int getFace() {
 		return this.face;
-	}
-	
-	public boolean isGod() {
-		return this.god;
 	}
 }

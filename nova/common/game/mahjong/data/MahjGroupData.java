@@ -3,6 +3,8 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nova.common.game.mahjong.util.MahjHandlerUtil;
+
 public class MahjGroupData {
 	// 0万1条2筒3东4中5GOD
 	private static final int GROUP_ID_MAX = 5;
@@ -13,6 +15,7 @@ public class MahjGroupData {
 	private ArrayList<MahjData> mOutDatas = new ArrayList<MahjData>();
 	private HashMap<Integer, MahjUnitData> mUnitDatas = new HashMap<Integer, MahjUnitData>();
 	private int mMatchType;
+	private int mGodIndex = -1;
 	
 	public MahjGroupData(int playerId, ArrayList<MahjData> datas) {
 		mPlayerId = playerId;
@@ -23,6 +26,12 @@ public class MahjGroupData {
 	
 	public ArrayList<MahjData> getDatas() {
 		return mDatas;
+	}
+	
+	public void updateGodData(int index) {
+		mGodIndex = index;
+		sortGroupData(mDatas);
+		initUnitDatas();
 	}
 	
 	public void addMatchData(MahjData data, int matchType) {
@@ -115,6 +124,61 @@ public class MahjGroupData {
 		return isSuccess;
 	}
 
+	public boolean isHuEnable() {
+		/*
+		if (dataCount % 3 != 2) {
+			return false;
+		}*/
+		
+		if (getCommonGroupCount(mUnitDatas) > 1) {
+			return false;
+		}
+
+		final int godCount = mUnitDatas.get(GROUP_ID_MAX) != null ? mUnitDatas.get(GROUP_ID_MAX).size() : 0;
+		for (int jiang = 0; jiang < GROUP_ID_MAX - 1; jiang++) {
+			if (mUnitDatas.get(jiang) == null || mUnitDatas.get(jiang).size() <= 0) {
+				continue;
+			}
+			int needGodCount = 0;
+			for (int i = 0; i < GROUP_ID_MAX - 1; i++) {
+				if (i == jiang) {
+					continue;
+				}
+				if (mUnitDatas.get(i) == null || mUnitDatas.get(i).size() <= 0) {
+					continue;
+				}
+				
+				needGodCount += getNeedGodCountForUnitData(mUnitDatas.get(i));
+				if (godCount < needGodCount) {
+					break;
+				}
+			}
+			
+			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), godCount - needGodCount);
+			if (isHu) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/*
+	 * 计算所有普通麻将(不包括风)的组数，用于需要缺门的麻将规则
+	 */
+	private int getCommonGroupCount(HashMap<Integer, MahjUnitData> unitDatas) {
+		int commonGroupCount = 0;
+		for (int i = 0; i < 3; i++) {
+			if (unitDatas.get(i) != null && unitDatas.get(i).size() > 0) {
+				commonGroupCount++;
+			}
+		}
+		return commonGroupCount;
+	}
+	
+	private int getNeedGodCountForUnitData(MahjUnitData data) {
+		return MahjHandlerUtil.getNeedGodCount(data.getIndexs());
+	}
+	
 	/*
 	 * 万／千／百／十／个
 	 * 胡／听／杆／碰／吃
@@ -191,7 +255,7 @@ public class MahjGroupData {
 	}
 	
 	private void addDataToUnit(MahjData data) {
-		int groupId = data.isGod() ? GROUP_ID_MAX : data.getColor();
+		int groupId = (data.getIndex() == mGodIndex) ? GROUP_ID_MAX : data.getColor();
 		if (mUnitDatas.get(groupId) == null) {
 			mUnitDatas.put(groupId, new MahjUnitData());
 		}

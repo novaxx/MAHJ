@@ -14,6 +14,7 @@ public class MahjManager {
 	private int mGodData = -1;
 	
 	public void initDatas() {
+		clearData();
 		getRandomDatas();
 		fillPlayerDatas();
 	}
@@ -107,14 +108,29 @@ public class MahjManager {
 		} while (count < MahjConstant.MAH_JONG_COUNT);
 	}
 	
-	public int getGodData() {
+	public void updateGodData() {
 		if (mGodData == -1) {
 			Random random = new Random();
 			int position = random.nextInt(mMahjDatas.size());
 			mGodData = mMahjDatas.get(position).getIndex();
 		}
 		
+		for (int i = 0; i < 4; i++) {
+			mPlayerGroupDatas.get(i).updateGodData(mGodData);
+		}
+	}
+	
+	public int getGodData() {
+		if (mGodData == -1) {
+			updateGodData();
+		}
 		return mGodData;
+	}
+	
+	private void clearData() {
+		mGodData = -1;
+		mMahjDatas.clear();
+		mPlayerGroupDatas.clear();
 	}
 	
 	private void fillPlayerDatas() {
