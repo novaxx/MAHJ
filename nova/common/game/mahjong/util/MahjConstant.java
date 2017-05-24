@@ -2,6 +2,10 @@ package nova.common.game.mahjong.util;
 
 public class MahjConstant {
 	
+	public static final int MAHJ_MATCH_CHI = 1;
+	public static final int MAHJ_MATCH_PENG = 10;
+	public static final int MAHJ_MATCH_GANG = 100;
+	
 	public final static int[] MAH_JONG_ELEMENTS = {
 		/*萬*/
 		1,  2,  3,  4,  5,  6,  7,  8,  9,

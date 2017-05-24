@@ -3,6 +3,7 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.MahjHandlerUtil;
 
 public class MahjGroupData {
@@ -35,8 +36,14 @@ public class MahjGroupData {
 	}
 	
 	public void addMatchData(MahjData data, int matchType) {
+		if (matchType != MahjConstant.MAHJ_MATCH_CHI 
+				&& matchType != MahjConstant.MAHJ_MATCH_PENG 
+				&& matchType != MahjConstant.MAHJ_MATCH_GANG) {
+			return;
+		}
+		
 		mMatchDatas.add(data);
-		final int mahjCount = matchType == 100 ? 2 : 3;
+		final int mahjCount = (matchType == MahjConstant.MAHJ_MATCH_PENG ? 2 : 3);
 		
 		for (int i = 0; i < mahjCount; i++) {
 			for (int j = 0; j < mDatas.size(); j++) {
@@ -64,6 +71,11 @@ public class MahjGroupData {
 	
 	public ArrayList<MahjData> getMatchDatas() {
 		return mMatchDatas;
+	}
+	
+	public void setMatchDatas(ArrayList<MahjData> datas) {
+		mMatchDatas.clear();
+		mMatchDatas.addAll(datas);
 	}
 	
 	public ArrayList<MahjData> getOutDatas() {

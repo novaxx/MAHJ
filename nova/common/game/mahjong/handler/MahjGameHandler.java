@@ -1,11 +1,7 @@
 package nova.common.game.mahjong.handler;
 
-import java.util.HashMap;
-import nova.common.game.mahjong.data.MahjGameData;
-import nova.common.game.mahjong.data.MahjGroupData;
+import nova.common.game.mahjong.data.MahjResponeData;
 
 public interface MahjGameHandler {
-	public void onGameInfoChange(int roomId,
-			MahjGameData data,
-			HashMap<Integer, MahjGroupData> playerDatas);
+	public void onGameInfoChange(int roomId, MahjResponeData data);
 }

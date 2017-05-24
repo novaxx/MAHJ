@@ -3,15 +3,11 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nova.common.game.mahjong.util.MahjUtil;
-
 public class MahjUnitData {
 
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private HashMap<Integer, ArrayList<Integer>> mUnitInfos = new HashMap<Integer, ArrayList<Integer>>();
 	private int mGrade;
-	private static final boolean DEBUG = false;
-	private static final boolean DEBUG_FENG = false;
 	
 	public void addAll(ArrayList<MahjData> datas) {
 		mDatas.addAll(datas);
@@ -106,45 +102,5 @@ public class MahjUnitData {
 	    }
 	    infoList.add(order);
 	    mUnitInfos.put(count, infoList);
-	}
-	
-	private boolean isShunZiEnable(ArrayList<Integer> infos, int godCount) {
-		int size = 0;
-		if (infos.size() <= 0) {
-			return true;
-		}
-		
-		if (infos.size() == 1) {
-			size = 1;
-		} else if (infos.size() == 2) {
-			if (infos.get(0) - infos.get(1) <= 2) {
-				size = 2;
-			} else {
-				size = 1;
-			}
-		} else {
-			if (infos.get(0) - infos.get(1) == 1) {
-				if (infos.get(1) - infos.get(2) == 1) {
-					size = 3;
-				} else {
-					size = 2;
-				}
-			} else if (infos.get(0) - infos.get(1) == 2) {
-				size = 2;
-			} else {
-				size = 1;
-			}
-		}
-		
-		int needGodCount = 3 - size;
-		if (godCount >= needGodCount) {
-			godCount = godCount - needGodCount;
-			for (int i = size - 1; i >= 0; i--) {
-				infos.remove(i);
-			}
-			return true;
-		}
-		
-		return false;
 	}
 }

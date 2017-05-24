@@ -1,12 +1,14 @@
 package nova.common.game.mahjong;
 
 import nova.common.game.mahjong.MahjGameStage.StageCallBack;
+import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
+import nova.common.game.mahjong.data.MahjResponeData;
 import nova.common.game.mahjong.handler.GameLogger;
+import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
 
-
-public class MahjGameManager implements StageCallBack {
+public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 
 	private int mRoomId;
 	private MahjGameStage mStage;
@@ -77,6 +79,16 @@ public class MahjGameManager implements StageCallBack {
 		mStage.stop();
 	}
 	
+	@Override
+	public void activeOutData(int playerId, int dataIndex) {
+		updateOutData(playerId, new MahjData(dataIndex));
+	}
+	
+	@Override
+	public void activeMatchData(int playerId, int matchType) {
+		updateMatchData(playerId, matchType);
+	}
+	
 	private void initGameData() {
 		mMahjManager.initDatas();
 		mGameData.initDatas();
@@ -86,7 +98,8 @@ public class MahjGameManager implements StageCallBack {
 	
 	private void updateGameInfoForHandler() {
 		if (mHandler != null) {
-			mHandler.onGameInfoChange(mRoomId, mGameData, mMahjManager.getPlayerDatas());
+			mHandler.onGameInfoChange(mRoomId, new MahjResponeData(mGameData, mMahjManager.getPlayerDatas()));
+			
 		}
 	}
 	
@@ -96,7 +109,12 @@ public class MahjGameManager implements StageCallBack {
 	}
 	
 	private void autoOutData() {
-		mMahjManager.autoOutData(mGameData.getCurrent());
+		MahjData outData = mMahjManager.getAutoOutData(mGameData.getCurrent());
+		updateOutData(mGameData.getCurrent(), outData);
+	}
+	
+	private void updateOutData(int playerId, MahjData outData) {
+		mMahjManager.updateOutData(playerId, outData);
 		
 		if (mMahjManager.getMahjDatas().size() <= 0) {
 			stopGame();
@@ -106,8 +124,11 @@ public class MahjGameManager implements StageCallBack {
 	private void autoMatchData() {
 		int playerId = mMahjManager.getFirstMatchPlayer(mGameData.getCurrent());
 		int matchType = mMahjManager.getFirstMatchType(playerId);
+		updateMatchData(playerId, matchType);
+	}
+	
+	private void updateMatchData(int playerId, int matchType) {
 		mMahjManager.obtainMatchData(playerId, mGameData.getCurrent(), matchType);
 		mGameData.setCurrent(playerId);
-		
 	}
 }

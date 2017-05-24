@@ -32,8 +32,11 @@ public class MahjManager {
 		mMahjDatas.remove(0);
 	}
 	
-	public void autoOutData(int playerId) {
-		MahjData outData = mPlayerGroupDatas.get(playerId).getAutoOutData();
+	public MahjData getAutoOutData(int playerId) {
+		return mPlayerGroupDatas.get(playerId).getAutoOutData();
+	}
+	
+	public void updateOutData(int playerId, MahjData outData) {
 		mPlayerGroupDatas.get(playerId).removeData(outData);
 		mPlayerGroupDatas.get(playerId).addOutData(outData);
 		for (int i = 0; i < 4; i++) {
@@ -62,12 +65,12 @@ public class MahjManager {
 	
 	public int getFirstMatchType(int playerId) {
 		int type = mPlayerGroupDatas.get(playerId).getMatchType();
-		if ((type % 100) / 10 > 0) {
+		if ((type % 1000) / 100 > 0) {
 			// 杆
-			return 10;
-		} else if ((type % 1000) / 100 > 0) {
+			return MahjConstant.MAHJ_MATCH_GANG;
+		} else if ((type % 100) / 10 > 0) {
 			// 碰
-			return 100;
+			return MahjConstant.MAHJ_MATCH_PENG;
 		}
 		
 		return 0;
