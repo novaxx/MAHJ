@@ -17,34 +17,33 @@ public class MahjGroupData {
 	private HashMap<Integer, MahjUnitData> mUnitDatas = new HashMap<Integer, MahjUnitData>();
 	private int mMatchType;
 	private int mGodIndex = -1;
-	
+
 	public MahjGroupData(int playerId, ArrayList<MahjData> datas) {
 		mPlayerId = playerId;
 		mDatas = datas;
 		sortGroupData(mDatas);
 		initUnitDatas();
 	}
-	
+
 	public ArrayList<MahjData> getDatas() {
 		return mDatas;
 	}
-	
+
 	public void updateGodData(int index) {
 		mGodIndex = index;
 		sortGroupData(mDatas);
 		initUnitDatas();
 	}
-	
+
 	public void addMatchData(MahjData data, int matchType) {
-		if (matchType != MahjConstant.MAHJ_MATCH_CHI 
-				&& matchType != MahjConstant.MAHJ_MATCH_PENG 
+		if (matchType != MahjConstant.MAHJ_MATCH_CHI && matchType != MahjConstant.MAHJ_MATCH_PENG
 				&& matchType != MahjConstant.MAHJ_MATCH_GANG) {
 			return;
 		}
-		
+
 		mMatchDatas.add(data);
 		final int mahjCount = (matchType == MahjConstant.MAHJ_MATCH_PENG ? 2 : 3);
-		
+
 		for (int i = 0; i < mahjCount; i++) {
 			for (int j = 0; j < mDatas.size(); j++) {
 				if (mDatas.get(j).getIndex() == data.getIndex()) {
@@ -54,74 +53,74 @@ public class MahjGroupData {
 				}
 			}
 		}
-		
+
 		sortGroupData(mMatchDatas);
 		sortGroupData(mDatas);
 		initUnitDatas();
 	}
-	
+
 	public void setLatestData(MahjData data) {
 		mLatestData = data;
 		initUnitDatas();
 	}
-	
+
 	public MahjData getLatestData() {
 		return mLatestData;
 	}
-	
+
 	public ArrayList<MahjData> getMatchDatas() {
 		return mMatchDatas;
 	}
-	
+
 	public void setMatchDatas(ArrayList<MahjData> datas) {
 		mMatchDatas.clear();
 		mMatchDatas.addAll(datas);
 	}
-	
+
 	public ArrayList<MahjData> getOutDatas() {
 		return mOutDatas;
 	}
-	
+
 	public void setOutDatas(ArrayList<MahjData> datas) {
 		mOutDatas.removeAll(mOutDatas);
 		mOutDatas.addAll(datas);
 	}
-	
+
 	public void addOutData(MahjData data) {
 		mOutDatas.add(data);
 	}
-	
+
 	public MahjData getLastOutData() {
 		return mOutDatas.get(mOutDatas.size() - 1);
 	}
-	
+
 	public void removeLastOutData() {
 		mOutDatas.remove(mOutDatas.size() - 1);
 	}
-	
+
 	public MahjData getAutoOutData() {
 		int groupId = getAutoOutGroupId();
 		MahjData data = mUnitDatas.get(groupId).getOutData();
 		return data;
 	}
-	
+
 	/*
-	 * @return
-	 * 万／千／百／十／个
-	 * 胡／听／杆／碰／吃
+	 * @return 万／千／百／十／个 胡／听／杆／碰／吃
 	 */
 	public int getMatchType() {
 		return mMatchType;
 	}
-	
-	public void updateMatchType(MahjData data) {
+
+	public int updateMatchType(MahjData data) {
 		if (data == null) {
 			mMatchType = 0;
 		} else {
 			mMatchType = getMatchTypeForData(data);
 		}
+		
+		return mMatchType;
 	}
-	
+
 	public boolean removeData(MahjData data) {
 		boolean isSuccess;
 		if (mLatestData != null && mLatestData.getIndex() == data.getIndex()) {
@@ -130,18 +129,17 @@ public class MahjGroupData {
 		} else {
 			isSuccess = mDatas.remove(data);
 		}
-		
+
 		updateGroupData();
-		
+
 		return isSuccess;
 	}
 
 	public boolean isHuEnable() {
 		/*
-		if (dataCount % 3 != 2) {
-			return false;
-		}*/
-		
+		 * if (dataCount % 3 != 2) { return false; }
+		 */
+
 		if (getCommonGroupCount(mUnitDatas) > 1) {
 			return false;
 		}
@@ -159,13 +157,13 @@ public class MahjGroupData {
 				if (mUnitDatas.get(i) == null || mUnitDatas.get(i).size() <= 0) {
 					continue;
 				}
-				
+
 				needGodCount += getNeedGodCountForUnitData(mUnitDatas.get(i));
 				if (godCount < needGodCount) {
 					break;
 				}
 			}
-			
+
 			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), godCount - needGodCount);
 			if (isHu) {
 				return true;
@@ -173,7 +171,7 @@ public class MahjGroupData {
 		}
 		return false;
 	}
-	
+
 	/*
 	 * 计算所有普通麻将(不包括风)的组数，用于需要缺门的麻将规则
 	 */
@@ -186,34 +184,33 @@ public class MahjGroupData {
 		}
 		return commonGroupCount;
 	}
-	
+
 	private int getNeedGodCountForUnitData(MahjUnitData data) {
 		return MahjHandlerUtil.getNeedGodCount(data.getIndexs());
 	}
-	
+
 	/*
-	 * 万／千／百／十／个
-	 * 胡／听／杆／碰／吃
+	 * 万／千／百／十／个 胡／听／杆／碰／吃
 	 */
 	private int getMatchTypeForData(MahjData data) {
 		int groupId = data.getColor();
 		if (mUnitDatas.get(groupId) != null) {
 			return mUnitDatas.get(groupId).getMatchType(data);
 		}
-		
+
 		return 0;
 	}
-	
+
 	private void updateGroupData() {
 		if (mLatestData != null) {
 			mDatas.add(mLatestData);
 			mLatestData = null;
 		}
-		
+
 		sortGroupData(mDatas);
 		initUnitDatas();
 	}
-	
+
 	private void sortGroupData(ArrayList<MahjData> datas) {
 		for (int i = 0; i < datas.size(); i++) {
 			// 从第i+1为开始循环数组
@@ -229,43 +226,43 @@ public class MahjGroupData {
 			}
 		}
 	}
-	
+
 	private boolean compareCard(MahjData data1, MahjData data2) {
 		return data2.getIndex() > data1.getIndex();
 	}
-	
+
 	private void initUnitDatas() {
 		if (mUnitDatas.size() > 0) {
 			mUnitDatas.clear();
 		}
-		
+
 		if (mLatestData != null) {
 			addDataToUnit(mLatestData);
 		}
-		
+
 		for (MahjData data : mDatas) {
 			addDataToUnit(data);
 		}
-		
+
 		for (int i = 0; i < GROUP_ID_MAX; i++) {
 			if (mUnitDatas.get(i) == null) {
 				continue;
 			}
 			mUnitDatas.get(i).updateUnitDataInfo();
 		}
-		
+
 		/*----添加LOG打印----begin----*/
 		String message = "P(" + mPlayerId + ")\n";
 		for (int i = 0; i < GROUP_ID_MAX; i++) {
 			if (mUnitDatas.get(i) == null) {
 				continue;
 			}
-			message = message + i + "-{" + mUnitDatas.get(i).toString() + "}"; 
+			message = message + i + "-{" + mUnitDatas.get(i).toString() + "}";
 		}
 		// android.util.Log.e("zhangxx", message);
 		/*----添加LOG打印----end----*/
 	}
-	
+
 	private void addDataToUnit(MahjData data) {
 		int groupId = (data.getIndex() == mGodIndex) ? GROUP_ID_MAX : data.getColor();
 		if (mUnitDatas.get(groupId) == null) {
@@ -273,20 +270,19 @@ public class MahjGroupData {
 		}
 		mUnitDatas.get(groupId).add(data);
 	}
-	
+
 	private int getAutoOutGroupId() {
-	    int groupId = -1;
-	    for (int i = 0; i < 3; i++) {
-	    	if (mUnitDatas.get(i) == null) {
-	    		continue;
-	    	}
-	    	
-	    	if (groupId == -1 || 
-	    			mUnitDatas.get(i).grade() < mUnitDatas.get(groupId).grade()) {
-	    		groupId = i;
-	    	}
-	    }
-	    
-	    return groupId;
+		int groupId = -1;
+		for (int i = 0; i < 3; i++) {
+			if (mUnitDatas.get(i) == null) {
+				continue;
+			}
+
+			if (groupId == -1 || mUnitDatas.get(i).grade() < mUnitDatas.get(groupId).grade()) {
+				groupId = i;
+			}
+		}
+
+		return groupId;
 	}
 }
