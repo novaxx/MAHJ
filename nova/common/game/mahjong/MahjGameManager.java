@@ -14,7 +14,7 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 	private MahjGameStage mStage;
 	private MahjManager mMahjManager;
 	private MahjGameHandler mHandler;
-	private GameLogger mLogger;
+	private GameLogger mLogger = GameLogger.getInstance();
 	private MahjGameData mGameData;
 
 	@Override
