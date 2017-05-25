@@ -7,6 +7,7 @@ import nova.common.game.mahjong.data.MahjResponeData;
 import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
+import nova.common.game.mahjong.util.MahjConstant;
 
 public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 
@@ -85,12 +86,28 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 
 	@Override
 	public void activeOutData(int playerId, int dataIndex) {
-		updateOutData(playerId, new MahjData(dataIndex));
+		if (mGameData.getCurrent() != playerId) {
+			return;
+		}
+		
+		if (mMahjManager.containData(playerId, dataIndex)) {
+			updateOutData(playerId, new MahjData(dataIndex));
+		} else {
+			autoOutData();
+		}
 		mStage.updateStage();
 	}
 
 	@Override
 	public void activeMatchData(int playerId, int matchType) {
+		if (matchType != MahjConstant.MAHJ_MATCH_PENG && matchType != MahjConstant.MAHJ_MATCH_GANG && matchType != MahjConstant.MAHJ_MATCH_CHI) {
+			return;
+		}
+		
+		if (mMahjManager.getPlayerDatas().get(playerId).getMatchType() / matchType % 10 <= 0) {
+			return;
+		}
+		
 		updateMatchData(playerId, matchType);
 		mStage.updateStage();
 	}

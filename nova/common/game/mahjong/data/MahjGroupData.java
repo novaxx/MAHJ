@@ -104,6 +104,20 @@ public class MahjGroupData {
 		return data;
 	}
 
+	public boolean containData(final int index) {
+		if (mLatestData.getIndex() == index) {
+			return true;
+		}
+		
+		for (MahjData data : mDatas) {
+			if (data.getIndex() == index) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/*
 	 * @return 万／千／百／十／个 胡／听／杆／碰／吃
 	 */
@@ -280,6 +294,14 @@ public class MahjGroupData {
 
 			if (groupId == -1 || mUnitDatas.get(i).grade() < mUnitDatas.get(groupId).grade()) {
 				groupId = i;
+			}
+		}
+		
+		if (groupId == -1) {
+			for (int i = 0; i < GROUP_ID_MAX; i++) {
+				if (mUnitDatas.get(i) != null) {
+					groupId = i;
+				}
 			}
 		}
 

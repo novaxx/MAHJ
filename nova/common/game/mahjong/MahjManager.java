@@ -129,6 +129,10 @@ public class MahjManager {
 		}
 		return mGodData;
 	}
+	
+	public boolean containData(int playerId, int index) {
+		return mPlayerGroupDatas.get(playerId).containData(index);
+	}
 
 	private void clearData() {
 		mGodData = -1;
