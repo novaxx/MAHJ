@@ -96,6 +96,7 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 			autoOutData();
 		}
 		mStage.updateStage();
+		updateGameInfoForHandler();
 	}
 
 	@Override
@@ -110,6 +111,7 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 		
 		updateMatchData(playerId, matchType);
 		mStage.updateStage();
+		updateGameInfoForHandler();
 	}
 
 	private void initGameData() {
