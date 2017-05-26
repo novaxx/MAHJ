@@ -8,6 +8,7 @@ public class MahjGameStage {
 		public void onStageEnd(int stage);
 		public boolean hasMatchType();
 		public void onDataOutEnd(boolean isMatched);
+		public void onTimeChange();
 	}
 
 	public static final int MAHJ_INIT = 0;
@@ -27,6 +28,7 @@ public class MahjGameStage {
 
 		@Override
 		public void handleMessage() {
+			mStageHandler.onTimeChange();
 			int timeOut = getTimeOutForStage(mGameStage);
 			if (mDuration < timeOut) {
 				mDuration++;

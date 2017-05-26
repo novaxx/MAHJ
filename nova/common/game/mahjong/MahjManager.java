@@ -46,6 +46,14 @@ public class MahjManager {
 			mPlayerGroupDatas.get(i).updateMatchType(outData);
 		}
 	}
+	
+	public void clearOperateType() {
+		for (int i = 0; i < 4; i++) {
+			if (mPlayerGroupDatas.get(i).getOperateType() < MahjConstant.MAHJ_MATCH_TING) {
+				mPlayerGroupDatas.get(i).setOperateType(0);
+			}
+		}
+	}
 
 	public boolean hasMatchType() {
 		for (int i = 0; i < 4; i++) {
@@ -93,6 +101,7 @@ public class MahjManager {
 	public void obtainMatchData(int playerId, int currentPlayerId, int matchType) {
 		MahjData data = mPlayerGroupDatas.get(currentPlayerId).getLastOutData();
 		mPlayerGroupDatas.get(playerId).addMatchData(data, matchType);
+		mPlayerGroupDatas.get(playerId).setOperateType(matchType);
 		mPlayerGroupDatas.get(currentPlayerId).removeLastOutData();
 	}
 

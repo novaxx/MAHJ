@@ -7,13 +7,16 @@ import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.MahjHandlerUtil;
 
 public class MahjGroupData {
-	// 0万1条2筒3东4中5GOD
-	private static final int GROUP_ID_MAX = 5;
-	private int mPlayerId;
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private ArrayList<MahjData> mMatchDatas = new ArrayList<MahjData>();
 	private MahjData mLatestData;
 	private ArrayList<MahjData> mOutDatas = new ArrayList<MahjData>();
+	// 1吃10碰100杠1000听10000胡
+	private int mOperateType;
+	
+	// 0万1条2筒3东4中5GOD
+	private static final int GROUP_ID_MAX = 5;
+	private int mPlayerId;
 	private HashMap<Integer, MahjUnitData> mUnitDatas = new HashMap<Integer, MahjUnitData>();
 	private int mMatchType;
 	private int mGodIndex = -1;
@@ -147,6 +150,14 @@ public class MahjGroupData {
 		updateGroupData();
 
 		return isSuccess;
+	}
+	
+	public void setOperateType(int type) {
+		mOperateType = type;
+	}
+	
+	public int getOperateType() {
+		return mOperateType;
 	}
 
 	public boolean isHuEnable() {

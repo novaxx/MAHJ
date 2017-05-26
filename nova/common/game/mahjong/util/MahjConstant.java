@@ -5,6 +5,8 @@ public class MahjConstant {
 	public static final int MAHJ_MATCH_CHI = 1;
 	public static final int MAHJ_MATCH_PENG = 10;
 	public static final int MAHJ_MATCH_GANG = 100;
+	public static final int MAHJ_MATCH_TING = 1000;
+	public static final int MAHJ_MATCH_HU = 10000;
 	
 	public final static int[] MAH_JONG_ELEMENTS = {
 		/*萬*/

@@ -57,6 +57,11 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 
 		mMahjManager.clearMatchType();
 	}
+	
+	@Override
+	public void onTimeChange() {
+		mMahjManager.clearOperateType();
+	}
 
 	public void setLogger(GameLogger logger) {
 		mLogger = logger;

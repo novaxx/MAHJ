@@ -6,12 +6,15 @@ import java.util.HashMap;
 public class MahjResponeData {
 
 	private class MahjPartData {
+		private int operate;
 		private int latestData;
 		private ArrayList<Integer> datas = new ArrayList<Integer>();
 		private ArrayList<Integer> matchedatas = new ArrayList<Integer>();
 		private ArrayList<Integer> outdatas = new ArrayList<Integer>();
 		
 		public MahjPartData(MahjGroupData groupData) {
+			operate = groupData.getOperateType();
+			
 			if (groupData.getLatestData() != null) {
 				latestData = groupData.getLatestData().getIndex();
 			}
@@ -27,6 +30,10 @@ public class MahjResponeData {
 			for (int i = 0; i < groupData.getOutDatas().size(); i++) {
 				outdatas.add(groupData.getOutDatas().get(i).getIndex());
 			}
+		}
+		
+		public int getOperate() {
+			return operate;
 		}
 		
 		public int getLatestData() {
@@ -111,6 +118,7 @@ public class MahjResponeData {
 			}
 			groupData.setMatchDatas(matchdatas);
 			groupData.updateGodData(god);
+			groupData.setOperateType(partData.getOperate());
 			groupDatas.put(i, groupData);
 		}
 		
