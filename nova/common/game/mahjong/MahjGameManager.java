@@ -1,5 +1,6 @@
 package nova.common.game.mahjong;
 
+import nova.common.game.GameManager;
 import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
@@ -9,7 +10,7 @@ import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
 import nova.common.game.mahjong.util.MahjConstant;
 
-public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
+public class MahjGameManager extends GameManager implements StageCallBack, MahjGameDispatcher {
 
 	private int mRoomId;
 	private MahjGameStage mStage;
@@ -72,6 +73,7 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 	}
 
 	public MahjGameManager(int roomId) {
+		super(roomId);
 		mRoomId = roomId;
 		mMahjManager = new MahjManager();
 		mGameData = new MahjGameData();
@@ -79,12 +81,16 @@ public class MahjGameManager implements StageCallBack, MahjGameDispatcher {
 		mStage.setStageHandler(this);
 	}
 
+	@Override
 	public void startGame() {
+		super.startGame();
 		initGameData();
 		mStage.start();
 	}
 
+	@Override
 	public void stopGame() {
+		super.stopGame();
 		mLogger.d("zhangxx", "stopGame");
 		mStage.stop();
 	}
