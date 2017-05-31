@@ -1,12 +1,14 @@
 package nova.common.game.mahjong;
 
 import nova.common.game.mahjong.util.GameTimer;
+import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.TimerCallback;
 
 public class MahjGameStage {
 	public interface StageCallBack {
 		public void onStageEnd(int stage);
 		public boolean hasMatchType();
+		public int getOperateType();
 		public void onDataOutEnd(boolean isMatched);
 		public void onTimeChange();
 	}
@@ -95,7 +97,10 @@ public class MahjGameStage {
 			break;
 
 		case MATCH_MAHJ_WAIT:
-			if (mStageHandler.hasMatchType()) {
+			if (mStageHandler.getOperateType() == MahjConstant.MAHJ_MATCH_GANG) {
+				mGameStage = GET_MAHJ_WAIT;
+				mStageHandler.onDataOutEnd(true);
+			} else if (mStageHandler.getOperateType() == MahjConstant.MAHJ_MATCH_PENG) {
 				mGameStage = OUT_MAHJ_WAIT;
 				mStageHandler.onDataOutEnd(true);
 			} else {

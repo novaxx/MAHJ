@@ -12,7 +12,7 @@ public class MahjGroupData {
 	private ArrayList<MahjData> mOutDatas = new ArrayList<MahjData>();
 	private MahjData mLatestData;
 	private int mGodIndex = -1;
-	// 1吃10碰100杠1000听10000胡
+	// 正在进行的操作：1吃10碰100杠1000听10000胡
 	private int mOperateType;
 	
 	// 0万1条2筒3东4中5GOD

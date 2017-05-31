@@ -49,6 +49,11 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	public boolean hasMatchType() {
 		return mMahjManager.hasMatchType();
 	}
+	
+	@Override
+	public int getOperateType() {
+		return mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).getOperateType();
+	}
 
 	@Override
 	public void onDataOutEnd(boolean isMatched) {
