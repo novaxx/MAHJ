@@ -184,10 +184,9 @@ public class MahjGroupData {
 		ArrayList<Integer> tmpDatas = new ArrayList<Integer>();
 		for (int i = 0; i < GROUP_ID_MAX; i++) {
 			MahjUnitData unitData = mUnitDatas.get(i);
-			if (unitData == null || unitData.size() <= 0) {
+			if (i < 3 && (unitData == null || unitData.size() <= 0)) {
 				continue;
 			}
-			
 			
 			for (int j = 0; j < MahjConstant.MAHJ_ARRS[i].length; j++) {
 				if (getCountFromDatas(MahjConstant.MAHJ_ARRS[i][j]) < 4) {
@@ -227,12 +226,13 @@ public class MahjGroupData {
 		}
 		
 		final int godCount = mUnitDatas.get(GROUP_ID_MAX) != null ? mUnitDatas.get(GROUP_ID_MAX).size() : 0;
-		for (int jiang = 0; jiang < GROUP_ID_MAX - 1; jiang++) {
+		for (int jiang = 0; jiang < GROUP_ID_MAX; jiang++) {
 			if (mUnitDatas.get(jiang) == null || mUnitDatas.get(jiang).size() <= 0) {
 				continue;
 			}
+			
 			int needGodCount = 0;
-			for (int i = 0; i < GROUP_ID_MAX - 1; i++) {
+			for (int i = 0; i < GROUP_ID_MAX; i++) {
 				if (i == jiang) {
 					continue;
 				}
@@ -245,7 +245,6 @@ public class MahjGroupData {
 					break;
 				}
 			}
-
 			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), godCount - needGodCount);
 			if (isHu) {
 				return true;
