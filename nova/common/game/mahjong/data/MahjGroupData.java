@@ -199,11 +199,8 @@ public class MahjGroupData {
 		}
 		
 		for (int data : tmpDatas) {
-			MahjGroupData groupData = new MahjGroupData(0, mDatas);
-			groupData.updateGodData(mGodIndex);
+			MahjGroupData groupData = copyGroupData();
 			groupData.setLatestData(new MahjData(data));
-			groupData.setMatchDatas(mMatchDatas);
-			groupData.setOperateType(MahjConstant.MAHJ_MATCH_TING);
 			if (groupData.isHuEnable()) {
 				tingDatas.add(data);
 			}
@@ -401,5 +398,19 @@ public class MahjGroupData {
 			}
 		}
 		return count;
+	}
+	
+	/**
+	 * 拷贝GroupData,用于判断听牌，不影响原有数据
+	 * @return
+	 * 拷贝的groupData
+	 */
+	private MahjGroupData copyGroupData() {
+		MahjGroupData groupData = new MahjGroupData(0, mDatas);
+		groupData.updateGodData(mGodIndex);
+		groupData.setMatchDatas(mMatchDatas);
+		groupData.setOperateType(MahjConstant.MAHJ_MATCH_TING);
+		
+		return groupData;
 	}
 }
