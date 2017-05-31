@@ -88,6 +88,7 @@ public class RoomController {
 		return 0;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private int searchLiveRoom(int playerId) {
 		Set set = mRoomManagers.entrySet();
 		Iterator it = set.iterator();

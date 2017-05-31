@@ -26,6 +26,7 @@ public class MahjUnitData {
 	}
 	
 	public void updateUnitDataInfo() {
+		sortUnitData(mDatas);
 		updateUnitInfo();
 		
 		mGrade = mDatas.size();
@@ -41,6 +42,14 @@ public class MahjUnitData {
 	
 	public MahjData getOutData() {
 		return mDatas.get(0);
+	}
+	
+	public boolean isGangEnable(MahjData data) {
+		if (mUnitInfos.get(3) != null && mUnitInfos.get(3).contains(data.getIndex())) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/*
@@ -102,5 +111,24 @@ public class MahjUnitData {
 	    }
 	    infoList.add(order);
 	    mUnitInfos.put(count, infoList);
+	}
+	
+	/**
+	 * 从大到小排序
+	 */
+	private void sortUnitData(ArrayList<MahjData> datas) {
+		for (int i = 0; i < datas.size(); i++) {
+			// 从第i+1为开始循环数组
+			for (int j = i + 1; j < datas.size(); j++) {
+				// 如果前一位比后一位小，那么就将两个数字调换
+				// 这里是按降序排列
+				// 如果你想按升序排列只要改变符号即可
+				if (datas.get(j).getIndex() > datas.get(i).getIndex()) {
+					MahjData tem = datas.get(i);
+					datas.set(i, datas.get(j));
+					datas.set(j, tem);
+				}
+			}
+		}
 	}
 }

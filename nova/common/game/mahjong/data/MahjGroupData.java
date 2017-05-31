@@ -9,8 +9,9 @@ import nova.common.game.mahjong.util.MahjHandlerUtil;
 public class MahjGroupData {
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
 	private ArrayList<MahjData> mMatchDatas = new ArrayList<MahjData>();
-	private MahjData mLatestData;
 	private ArrayList<MahjData> mOutDatas = new ArrayList<MahjData>();
+	private MahjData mLatestData;
+	private int mGodIndex = -1;
 	// 1吃10碰100杠1000听10000胡
 	private int mOperateType;
 	
@@ -19,7 +20,6 @@ public class MahjGroupData {
 	private int mPlayerId;
 	private HashMap<Integer, MahjUnitData> mUnitDatas = new HashMap<Integer, MahjUnitData>();
 	private int mMatchType;
-	private int mGodIndex = -1;
 
 	public MahjGroupData(int playerId, ArrayList<MahjData> datas) {
 		mPlayerId = playerId;
@@ -122,7 +122,8 @@ public class MahjGroupData {
 	}
 	
 	/*
-	 * @return 万／千／百／十／个 胡／听／杆／碰／吃
+	 * @return 万／千／百／十／个 
+	 *                         胡／听／杆／碰／吃
 	 */
 	public int getMatchType() {
 		return mMatchType;
@@ -136,6 +137,20 @@ public class MahjGroupData {
 		}
 		
 		return mMatchType;
+	}
+	
+	public int updateMatchTypeForLatestData() {
+		int groupId = getGroupIdByData(mLatestData);
+		int matchType = 0;
+		if (isHuEnable()) {
+			matchType += MahjConstant.MAHJ_MATCH_HU;
+		}
+		
+		if (mUnitDatas.get(groupId).isGangEnable(mLatestData)) {
+			matchType += MahjConstant.MAHJ_MATCH_GANG;
+		}
+		
+		return matchType;
 	}
 
 	public boolean removeData(MahjData data) {
@@ -159,16 +174,58 @@ public class MahjGroupData {
 	public int getOperateType() {
 		return mOperateType;
 	}
-
+	
+	public ArrayList<Integer> getTingDatas() {
+		ArrayList<Integer> tingDatas = new ArrayList<Integer>();
+		if (getCommonGroupCount(mUnitDatas) > 1) {
+			return tingDatas;
+		}
+		
+		ArrayList<Integer> tmpDatas = new ArrayList<Integer>();
+		for (int i = 0; i < GROUP_ID_MAX; i++) {
+			MahjUnitData unitData = mUnitDatas.get(i);
+			if (unitData == null || unitData.size() <= 0) {
+				continue;
+			}
+			
+			
+			for (int j = 0; j < MahjConstant.MAHJ_ARRS[i].length; j++) {
+				if (getCountFromDatas(MahjConstant.MAHJ_ARRS[i][j]) < 4) {
+					tmpDatas.add(MahjConstant.MAHJ_ARRS[i][j]);
+				}
+			}
+		}
+		if (!tmpDatas.contains(mGodIndex) && getCountFromDatas(mGodIndex) < 4) {
+			tmpDatas.add(mGodIndex);
+		}
+		
+		for (int data : tmpDatas) {
+			MahjGroupData groupData = new MahjGroupData(0, mDatas);
+			groupData.updateGodData(mGodIndex);
+			groupData.setLatestData(new MahjData(data));
+			groupData.setMatchDatas(mMatchDatas);
+			groupData.setOperateType(MahjConstant.MAHJ_MATCH_TING);
+			if (groupData.isHuEnable()) {
+				tingDatas.add(data);
+			}
+		}
+		
+		return tingDatas;
+	}
+	
 	public boolean isHuEnable() {
 		/*
 		 * if (dataCount % 3 != 2) { return false; }
 		 */
 
+		if (mOperateType != MahjConstant.MAHJ_MATCH_TING) {
+			return false;
+		}
+		
 		if (getCommonGroupCount(mUnitDatas) > 1) {
 			return false;
 		}
-
+		
 		final int godCount = mUnitDatas.get(GROUP_ID_MAX) != null ? mUnitDatas.get(GROUP_ID_MAX).size() : 0;
 		for (int jiang = 0; jiang < GROUP_ID_MAX - 1; jiang++) {
 			if (mUnitDatas.get(jiang) == null || mUnitDatas.get(jiang).size() <= 0) {
@@ -218,7 +275,7 @@ public class MahjGroupData {
 	 * 万／千／百／十／个 胡／听／杆／碰／吃
 	 */
 	private int getMatchTypeForData(MahjData data) {
-		int groupId = data.getColor();
+		int groupId = getGroupIdByData(data);
 		if (mUnitDatas.get(groupId) != null) {
 			return mUnitDatas.get(groupId).getMatchType(data);
 		}
@@ -289,7 +346,7 @@ public class MahjGroupData {
 	}
 
 	private void addDataToUnit(MahjData data) {
-		int groupId = (data.getIndex() == mGodIndex) ? GROUP_ID_MAX : data.getColor();
+		int groupId = getGroupIdByData(data);
 		if (mUnitDatas.get(groupId) == null) {
 			mUnitDatas.put(groupId, new MahjUnitData());
 		}
@@ -317,5 +374,33 @@ public class MahjGroupData {
 		}
 
 		return groupId;
+	}
+	
+	private int getGroupIdByData(MahjData data) {
+		if (data.getIndex() == mGodIndex) {
+			return GROUP_ID_MAX;
+		}  else {
+			return data.getColor();
+		}
+	}
+	
+	private int getCountFromDatas(int index) {
+		int count = 0;
+		if (mLatestData != null && mLatestData.getIndex() == index) {
+			count++;
+		}
+		
+		for (MahjData data : mMatchDatas) {
+			if (data.getIndex() == index) {
+				count++;
+			}
+		}
+		
+		for (MahjData data : mDatas) {
+			if (data.getIndex() == index) {
+				count++;
+			}
+		}
+		return count;
 	}
 }

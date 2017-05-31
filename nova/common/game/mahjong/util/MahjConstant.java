@@ -8,6 +8,14 @@ public class MahjConstant {
 	public static final int MAHJ_MATCH_TING = 1000;
 	public static final int MAHJ_MATCH_HU = 10000;
 	
+	public final static int[][] MAHJ_ARRS = {
+			{1,2,3,4,5,6,7,8,9},
+			{11,12,13,14,15,16,17,18,19},
+			{21,22,23,24,25,26,27,28,29},
+			{31,32,33,34},
+			{41,42,43},
+	};
+	
 	public final static int[] MAH_JONG_ELEMENTS = {
 		/*萬*/
 		1,  2,  3,  4,  5,  6,  7,  8,  9,

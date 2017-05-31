@@ -78,22 +78,14 @@ public class MahjHandlerUtilTestCase extends TestCase {
 	
 	public void test_getGodCount_Not_Jiang() {
 		for (int i = 0; i < TEST_NEEDGOD_DATA.length; i++) {
-			long start_time = System.currentTimeMillis();
 			int needGodCount = MahjHandlerUtil.getNeedGodCount(TestUtil.getMahjIndexs(TEST_NEEDGOD_DATA[i][1]));
-			long end_time = System.currentTimeMillis();
-			System.out.print("test_getGodCount_Not_Jiang  i:" + i + ", " + TEST_NEEDGOD_DATA[i][0] + ", " + needGodCount
-					+ ", durtion : " + (end_time - start_time) + "\n");
 			assertEquals((int) Integer.valueOf(TEST_NEEDGOD_DATA[i][0]), needGodCount);
 		}
 	}
 
 	public void test_getGodCount_Feng_Not_Jiang() {
 		for (int i = 0; i < TEST_NEEDGOD_FENG_DATA.length; i++) {
-			long start_time = System.currentTimeMillis();
 			int needGodCount = MahjHandlerUtil.getNeedGodCount(TestUtil.getMahjIndexs(TEST_NEEDGOD_FENG_DATA[i][1]));
-			long end_time = System.currentTimeMillis();
-			System.out.print("test_getGodCount_Feng_Not_Jiang  i:" + i + ", " + TEST_NEEDGOD_FENG_DATA[i][0] + ", "
-					+ needGodCount + ", durtion : " + (end_time - start_time) + "\n");
 			assertEquals((int) Integer.valueOf(TEST_NEEDGOD_FENG_DATA[i][0]), needGodCount);
 		}
 	}
@@ -103,11 +95,7 @@ public class MahjHandlerUtilTestCase extends TestCase {
 			String data = TEST_HUJIANG_DATA[i][1];
 			int godCount = Integer.valueOf(TEST_HUJIANG_DATA[i][0]);
 			boolean expected = Boolean.valueOf(TEST_HUJIANG_DATA[i][2]);
-			long start_time = System.currentTimeMillis();
 			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), godCount);
-			long end_time = System.currentTimeMillis();
-			System.out.print("test_isHuEnable_Jiang  i:" + i + ", expected:" + expected + ", isHu:" + isHu
-					+ ", durtion : " + (end_time - start_time) + "\n");
 			assertEquals(expected, isHu);
 		}
 	}
@@ -117,11 +105,7 @@ public class MahjHandlerUtilTestCase extends TestCase {
 			String data = TEST_HUJIANG_FENG_DATA[i][1];
 			int godCount = Integer.valueOf(TEST_HUJIANG_FENG_DATA[i][0]);
 			boolean expected = Boolean.valueOf(TEST_HUJIANG_FENG_DATA[i][2]);
-			long start_time = System.currentTimeMillis();
 			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), godCount);
-			long end_time = System.currentTimeMillis();
-			System.out.print("test_isHuEnable_FENG_Jiang  i:" + i + ", expected:" + expected + ", isHu:" + isHu
-					+ ", durtion : " + (end_time - start_time) + "\n");
 			assertEquals(expected, isHu);
 		}
 	}
