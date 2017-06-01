@@ -52,6 +52,10 @@ public class MahjUnitData {
 		return false;
 	}
 	
+	public ArrayList<Integer> get4Combine() {
+		return mUnitInfos.get(4);
+	}
+	
 	/*
 	 * 百／十／个
 	 * 杆／碰／-

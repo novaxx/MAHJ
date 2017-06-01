@@ -88,7 +88,12 @@ public class MahjGameStage {
 			break;
 
 		case OUT_MAHJ_WAIT:
-			if (mStageHandler.hasMatchType()) {
+			if (mStageHandler.getOperateType() == MahjConstant.MAHJ_MATCH_HU) {
+				mGameStage = MAHJ_END;
+			} else if (mStageHandler.getOperateType() == MahjConstant.MAHJ_MATCH_GANG) {
+				mGameStage = GET_MAHJ_WAIT;
+				mStageHandler.onDataOutEnd(true);
+			} else if (mStageHandler.hasMatchType()) {
 				mGameStage = MATCH_MAHJ_WAIT;
 			} else {
 				mGameStage = GET_MAHJ_WAIT;
@@ -107,6 +112,9 @@ public class MahjGameStage {
 				mGameStage = GET_MAHJ_WAIT;
 				mStageHandler.onDataOutEnd(false);
 			}
+			break;
+			
+		case MAHJ_END:
 			break;
 
 		default:

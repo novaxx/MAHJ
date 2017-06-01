@@ -43,23 +43,11 @@ public class MahjGroupData {
 				&& matchType != MahjConstant.MAHJ_MATCH_GANG) {
 			return;
 		}
-
-		mMatchDatas.add(data);
-		final int mahjCount = (matchType == MahjConstant.MAHJ_MATCH_PENG ? 2 : 3);
-
-		for (int i = 0; i < mahjCount; i++) {
-			for (int j = 0; j < mDatas.size(); j++) {
-				if (mDatas.get(j).getIndex() == data.getIndex()) {
-					mMatchDatas.add(mDatas.get(j));
-					mDatas.remove(j);
-					break;
-				}
-			}
-		}
-
-		sortGroupData(mMatchDatas);
-		sortGroupData(mDatas);
-		initUnitDatas();
+		operateData(data.getIndex(), matchType, false);
+	}
+	
+	public void operateGangData(int index) {
+		operateData(index, MahjConstant.MAHJ_MATCH_GANG, true);
 	}
 
 	public void setLatestData(MahjData data) {
@@ -173,6 +161,16 @@ public class MahjGroupData {
 	
 	public int getOperateType() {
 		return mOperateType;
+	}
+	
+	public ArrayList<Integer> getGangListFromDatas() {
+		ArrayList<Integer> gangList = new ArrayList<>();
+		for (int i = 0; i <= GROUP_ID_MAX; i++) {
+			if (mUnitDatas.get(i).get4Combine() != null && mUnitDatas.get(i).get4Combine().size() > 0) {
+				gangList.addAll(mUnitDatas.get(i).get4Combine());
+			}
+		}
+		return gangList;
 	}
 	
 	public ArrayList<Integer> getTingDatas() {
@@ -412,5 +410,41 @@ public class MahjGroupData {
 		groupData.setOperateType(MahjConstant.MAHJ_MATCH_TING);
 		
 		return groupData;
+	}
+	
+	/**
+	 *   处理 听/碰/杠
+	 * @param index 
+	 * @param operateType
+	 * @param isOwnGang 是否暗杠
+	 */
+	private void operateData(int index, int operateType, boolean isOwnGang) {
+		if (!isOwnGang) {
+			mMatchDatas.add(new MahjData(index));
+		}
+		
+		int mahjCount = 0;
+		if (operateType == MahjConstant.MAHJ_MATCH_GANG && isOwnGang) {
+			mahjCount = 4;
+		} else if (operateType == MahjConstant.MAHJ_MATCH_GANG) {
+			mahjCount = 3;
+		} else if (operateType == MahjConstant.MAHJ_MATCH_PENG) {
+			mahjCount = 2;
+		}
+
+		for (int i = 0; i < mahjCount; i++) {
+			for (int j = 0; j < mDatas.size(); j++) {
+				if (mDatas.get(j).getIndex() == index) {
+					mMatchDatas.add(mDatas.get(j));
+					mDatas.remove(j);
+					break;
+				}
+			}
+		}
+
+		sortGroupData(mMatchDatas);
+		sortGroupData(mDatas);
+		initUnitDatas();
+	
 	}
 }

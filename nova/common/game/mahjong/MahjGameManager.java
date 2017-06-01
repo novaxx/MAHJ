@@ -1,5 +1,7 @@
 package nova.common.game.mahjong;
 
+import java.util.ArrayList;
+
 import nova.common.game.GameManager;
 import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
@@ -37,6 +39,10 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 		case MahjGameStage.MATCH_MAHJ_WAIT:
 			autoMatchData();
+			break;
+			
+		case MahjGameStage.MAHJ_END:
+			stopGame();
 			break;
 
 		default:
@@ -116,16 +122,29 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	}
 
 	@Override
-	public void activeMatchData(int playerId, int matchType) {
-		if (matchType != MahjConstant.MAHJ_MATCH_PENG && matchType != MahjConstant.MAHJ_MATCH_GANG && matchType != MahjConstant.MAHJ_MATCH_CHI) {
+	public void activeOperateData(int playerId, int operateType) {
+		if (operateType != MahjConstant.MAHJ_MATCH_PENG && operateType != MahjConstant.MAHJ_MATCH_GANG 
+				&& operateType != MahjConstant.MAHJ_MATCH_CHI && operateType != MahjConstant.MAHJ_MATCH_TING
+				&& operateType != MahjConstant.MAHJ_MATCH_HU) {
 			return;
 		}
 		
-		if (mMahjManager.getPlayerDatas().get(playerId).getMatchType() / matchType % 10 <= 0) {
+		if (operateType == MahjConstant.MAHJ_MATCH_TING) {
+			mMahjManager.getPlayerDatas().get(playerId).setOperateType(MahjConstant.MAHJ_MATCH_TING);
 			return;
 		}
 		
-		updateMatchData(playerId, matchType);
+		if (operateType != MahjConstant.MAHJ_MATCH_HU) {
+			mMahjManager.getPlayerDatas().get(playerId).setOperateType(MahjConstant.MAHJ_MATCH_HU);
+			return;
+		}
+		
+		if (mMahjManager.getPlayerDatas().get(playerId).getMatchType() / operateType % 10 <= 0) {
+			return;
+		}
+		
+		updateMatchData(playerId, operateType);
+		
 		mStage.updateStage();
 		updateGameInfoForHandler();
 	}
@@ -148,6 +167,20 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	}
 
 	private void autoOutData() {
+		// 胡牌
+		if (mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).isHuEnable()) {
+			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_HU);
+			return;
+		}
+		
+		//杠
+		ArrayList<Integer> gangList = mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).getGangListFromDatas();
+		if (gangList != null && gangList.size() > 0) {
+			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).operateGangData(gangList.get(0));
+			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_GANG);
+			return;
+		}
+		
 		MahjData outData = mMahjManager.getAutoOutData(mGameData.getCurrent());
 		updateOutData(mGameData.getCurrent(), outData);
 	}
