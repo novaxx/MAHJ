@@ -142,12 +142,18 @@ public class MahjGroupData {
 	}
 
 	public boolean removeData(MahjData data) {
-		boolean isSuccess;
+		boolean isSuccess = false;
 		if (mLatestData != null && mLatestData.getIndex() == data.getIndex()) {
 			mLatestData = null;
 			isSuccess = true;
 		} else {
-			isSuccess = mDatas.remove(data);
+			for (int i = 0; i < mDatas.size(); i++) {
+				if (mDatas.get(i).getIndex() == data.getIndex()) {
+					mDatas.remove(i);
+					isSuccess = true;
+					break;
+				}
+			}
 		}
 
 		updateGroupData();
@@ -166,6 +172,10 @@ public class MahjGroupData {
 	public ArrayList<Integer> getGangListFromDatas() {
 		ArrayList<Integer> gangList = new ArrayList<>();
 		for (int i = 0; i <= GROUP_ID_MAX; i++) {
+			if (mUnitDatas.get(i) == null) {
+				continue;
+			}
+			
 			if (mUnitDatas.get(i).get4Combine() != null && mUnitDatas.get(i).get4Combine().size() > 0) {
 				gangList.addAll(mUnitDatas.get(i).get4Combine());
 			}

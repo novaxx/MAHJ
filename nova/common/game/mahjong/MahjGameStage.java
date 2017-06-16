@@ -130,8 +130,9 @@ public class MahjGameStage {
 	private int getTimeOutForStage(int stage) {
 		switch (stage) {
 		case MATCH_MAHJ_WAIT:
-			return 0;
-
+			return 3;
+		case OUT_MAHJ_WAIT:
+			return 3;
 		default:
 			break;
 		}
