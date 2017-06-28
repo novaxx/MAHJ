@@ -131,11 +131,11 @@ public class MahjGroupData {
 		int groupId = getGroupIdByData(mLatestData);
 		int matchType = 0;
 		if (isHuEnable()) {
-			matchType += MahjConstant.MAHJ_MATCH_HU;
+			matchType = matchType | MahjConstant.MAHJ_MATCH_HU;
 		}
 		
 		if (mUnitDatas.get(groupId).isGangEnable(mLatestData)) {
-			matchType += MahjConstant.MAHJ_MATCH_GANG;
+			matchType = matchType | MahjConstant.MAHJ_MATCH_GANG;
 		}
 		
 		return matchType;

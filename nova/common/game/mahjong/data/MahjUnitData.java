@@ -3,6 +3,8 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nova.common.game.mahjong.util.MahjConstant;
+
 public class MahjUnitData {
 
 	private ArrayList<MahjData> mDatas = new ArrayList<MahjData>();
@@ -61,17 +63,16 @@ public class MahjUnitData {
 	 * 杆／碰／-
 	 */
 	public int getMatchType(MahjData data) {
-		int gan = 0;
-		int peng = 0;
+		int type = 0;
 		if (mUnitInfos.get(3) != null && mUnitInfos.get(3).contains(data.getIndex())) {
-			gan = 1;
+			type = type | MahjConstant.MAHJ_MATCH_GANG;
 		}
 		
 		if (mUnitInfos.get(2) != null && mUnitInfos.get(2).contains(data.getIndex())) {
-			peng = 1;
+			type = type | MahjConstant.MAHJ_MATCH_PENG;
 		}
 		
-		return gan * 100 + peng * 10;
+		return type;
 	}
 	
 	public String toString() {

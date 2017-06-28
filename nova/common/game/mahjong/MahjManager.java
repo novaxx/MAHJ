@@ -6,6 +6,7 @@ import java.util.Random;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGroupData;
 import nova.common.game.mahjong.util.MahjConstant;
+import nova.common.game.mahjong.util.TestMahjConstant;
 
 public class MahjManager {
 
@@ -73,10 +74,10 @@ public class MahjManager {
 
 	public int getFirstMatchType(int playerId) {
 		int type = mPlayerGroupDatas.get(playerId).getMatchType();
-		if ((type % 1000) / 100 > 0) {
+		if ((type & MahjConstant.MAHJ_MATCH_GANG) == MahjConstant.MAHJ_MATCH_GANG) {
 			// 杆
 			return MahjConstant.MAHJ_MATCH_GANG;
-		} else if ((type % 100) / 10 > 0) {
+		} else if ((type & MahjConstant.MAHJ_MATCH_PENG) == MahjConstant.MAHJ_MATCH_PENG) {
 			// 碰
 			return MahjConstant.MAHJ_MATCH_PENG;
 		}
@@ -106,6 +107,19 @@ public class MahjManager {
 	}
 
 	private void getRandomDatas() {
+		if (TestMahjConstant.isDebug()) {
+			int[][] testMahjDatas = TestMahjConstant.getDebugElements();
+			for (int i = 0; i < 13; i ++) {
+				for (int j = 0; j < 4; j++) {
+					mMahjDatas.add(new MahjData(testMahjDatas[j][i]));
+				}
+			}
+			for (int i = 0; i < testMahjDatas[4].length; i++) {
+				mMahjDatas.add(new MahjData(testMahjDatas[4][i]));
+			}
+			return;
+		}
+		
 		Random random = new Random();
 		int[] tempData = new int[MahjConstant.MAH_JONG_COUNT];
 		System.arraycopy(MahjConstant.MAH_JONG_ELEMENTS, 0, tempData, 0, MahjConstant.MAH_JONG_COUNT);

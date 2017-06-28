@@ -139,7 +139,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 			return;
 		}
 		
-		if (mMahjManager.getPlayerDatas().get(playerId).getMatchType() / operateType % 10 <= 0) {
+		if ((mMahjManager.getPlayerDatas().get(playerId).getMatchType() & operateType) != operateType) {
 			return;
 		}
 		

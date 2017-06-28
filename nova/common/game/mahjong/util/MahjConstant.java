@@ -3,10 +3,10 @@ package nova.common.game.mahjong.util;
 public class MahjConstant {
 	
 	public static final int MAHJ_MATCH_CHI = 1;
-	public static final int MAHJ_MATCH_PENG = 10;
-	public static final int MAHJ_MATCH_GANG = 100;
-	public static final int MAHJ_MATCH_TING = 1000;
-	public static final int MAHJ_MATCH_HU = 10000;
+	public static final int MAHJ_MATCH_PENG = 2;
+	public static final int MAHJ_MATCH_GANG = 4;
+	public static final int MAHJ_MATCH_TING = 8;
+	public static final int MAHJ_MATCH_HU = 16;
 	
 	public final static int[][] MAHJ_ARRS = {
 			{1,2,3,4,5,6,7,8,9},
