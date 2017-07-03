@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Random;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGroupData;
+import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.TestMahjConstant;
 
@@ -47,7 +48,7 @@ public class MahjManager {
 			mPlayerGroupDatas.get(i).updateMatchType(outData);
 		}
 	}
-	
+
 	public void clearOperateType() {
 		for (int i = 0; i < 4; i++) {
 			if (mPlayerGroupDatas.get(i).getOperateType() < MahjConstant.MAHJ_MATCH_TING) {
@@ -108,15 +109,7 @@ public class MahjManager {
 
 	private void getRandomDatas() {
 		if (TestMahjConstant.isDebug()) {
-			int[][] testMahjDatas = TestMahjConstant.getDebugElements();
-			for (int i = 0; i < 13; i ++) {
-				for (int j = 0; j < 4; j++) {
-					mMahjDatas.add(new MahjData(testMahjDatas[j][i]));
-				}
-			}
-			for (int i = 0; i < testMahjDatas[4].length; i++) {
-				mMahjDatas.add(new MahjData(testMahjDatas[4][i]));
-			}
+			fillRandomDatasForTest();
 			return;
 		}
 		
@@ -152,7 +145,7 @@ public class MahjManager {
 		}
 		return mGodData;
 	}
-	
+
 	public boolean containData(int playerId, int index) {
 		return mPlayerGroupDatas.get(playerId).containData(index);
 	}
@@ -179,8 +172,12 @@ public class MahjManager {
 			}
 
 			datas.add(mMahjDatas.get(i));
-			mMahjDatas.remove(i);
 		}
+		
+		for (int i = 0; i < datas.size(); i++) {
+			mMahjDatas.remove(0);
+		}
+		
 		mPlayerGroupDatas.put(playerId, new MahjGroupData(playerId, datas));
 	}
 
@@ -197,5 +194,22 @@ public class MahjManager {
 		}
 
 		return player;
+	}
+
+	private void fillRandomDatasForTest() {
+		if (!TestMahjConstant.isDebug()) {
+			return;
+		}
+		
+		int[][] testDatas = TestMahjConstant.getDebugElements();
+		for (int i = 0; i < 4; i++) {
+			for (int index : testDatas[i]) {
+				mMahjDatas.add(new MahjData(index));
+			}
+		}
+		
+		for (int index : testDatas[4]) {
+			mMahjDatas.add(new MahjData(index));
+		}
 	}
 }
