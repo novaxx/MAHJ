@@ -47,7 +47,7 @@ public class MahjUnitData {
 	}
 	
 	public boolean isGangEnable(MahjData data) {
-		if (mUnitInfos.get(3) != null && mUnitInfos.get(3).contains(data.getIndex())) {
+		if (mUnitInfos.get(4) != null && mUnitInfos.get(4).contains(data.getIndex())) {
 			return true;
 		}
 		

@@ -3,6 +3,7 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.MahjHandlerUtil;
 
@@ -127,14 +128,13 @@ public class MahjGroupData {
 		return mMatchType;
 	}
 	
-	public int updateMatchTypeForLatestData() {
-		int groupId = getGroupIdByData(mLatestData);
+	public int updateMatchTypeForGetMahj() {
 		int matchType = 0;
 		if (isHuEnable()) {
 			matchType = matchType | MahjConstant.MAHJ_MATCH_HU;
 		}
 		
-		if (mUnitDatas.get(groupId).isGangEnable(mLatestData)) {
+		if (getGangListFromDatas().size() > 0) {
 			matchType = matchType | MahjConstant.MAHJ_MATCH_GANG;
 		}
 		
