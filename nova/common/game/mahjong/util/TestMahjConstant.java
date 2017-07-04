@@ -23,6 +23,19 @@ public class TestMahjConstant {
 			{2,2,3,3,4,4,5,5,6,6,7,7,8,8,9}
 	};
 	
+	// MAHJ_ELEMENTS_DEBUG_3 : 连续杆
+	public final static int[][] MAHJ_ELEMENTS_DEBUG_3 = {
+			{1,1,1,1,2,2,2,2,3,3,3,3,4},
+			{11,12,13,14,15,16,17,18,19,21,22,23,24},
+			{11,12,13,14,15,16,17,18,19,21,22,23,24},
+			{11,12,13,14,15,16,17,18,19,21,22,23,24},
+			{4,4,4,5,5,5,5}
+	};
+	
+	/**
+	 * @param debugType
+	 * 1-起手杆 2-打牌碰杆 3-连续杆
+	 */
 	public static void setDebug(int debugType) {
 		mIsDebug = true;
 		mDebugType = debugType;
@@ -41,6 +54,8 @@ public class TestMahjConstant {
 			return MAHJ_ELEMENTS_DEBUG_1;
 		} else if (mDebugType == 2) {
 			return MAHJ_ELEMENTS_DEBUG_2;
+		} else if (mDebugType == 3) {
+			return MAHJ_ELEMENTS_DEBUG_3;
 		}
 		
 		return null;
