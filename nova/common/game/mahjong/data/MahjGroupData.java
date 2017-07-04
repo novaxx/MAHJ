@@ -25,8 +25,7 @@ public class MahjGroupData {
 	public MahjGroupData(int playerId, ArrayList<MahjData> datas) {
 		mPlayerId = playerId;
 		mDatas = datas;
-		sortGroupData(mDatas);
-		initUnitDatas();
+		updateGroupData();
 	}
 
 	public ArrayList<MahjData> getDatas() {
@@ -35,8 +34,7 @@ public class MahjGroupData {
 
 	public void updateGodData(int index) {
 		mGodIndex = index;
-		sortGroupData(mDatas);
-		initUnitDatas();
+		updateGroupData();
 	}
 
 	public void addMatchData(MahjData data, int matchType) {
@@ -52,8 +50,9 @@ public class MahjGroupData {
 	}
 
 	public void setLatestData(MahjData data) {
+		moveLatestDataToDatas();
 		mLatestData = data;
-		initUnitDatas();
+		updateGroupData();
 	}
 
 	public MahjData getLatestData() {
@@ -156,6 +155,7 @@ public class MahjGroupData {
 			}
 		}
 
+		moveLatestDataToDatas();
 		updateGroupData();
 
 		return isSuccess;
@@ -287,12 +287,15 @@ public class MahjGroupData {
 		return 0;
 	}
 
-	private void updateGroupData() {
+	private void moveLatestDataToDatas() {
 		if (mLatestData != null) {
 			mDatas.add(mLatestData);
 			mLatestData = null;
 		}
-
+	}
+	
+	private void updateGroupData() {
+		sortGroupData(mMatchDatas);
 		sortGroupData(mDatas);
 		initUnitDatas();
 	}
@@ -451,10 +454,6 @@ public class MahjGroupData {
 				}
 			}
 		}
-
-		sortGroupData(mMatchDatas);
-		sortGroupData(mDatas);
-		initUnitDatas();
-	
+		updateGroupData();
 	}
 }
