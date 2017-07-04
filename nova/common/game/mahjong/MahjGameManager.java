@@ -134,7 +134,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 			return;
 		}
 		
-		if (operateType != MahjConstant.MAHJ_MATCH_HU) {
+		if (operateType == MahjConstant.MAHJ_MATCH_HU) {
 			mMahjManager.getPlayerDatas().get(playerId).setOperateType(MahjConstant.MAHJ_MATCH_HU);
 			return;
 		}
