@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGroupData;
-import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.TestMahjConstant;
 

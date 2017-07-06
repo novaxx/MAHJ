@@ -19,6 +19,7 @@ public class MahjGroupData {
 	// 0万1条2筒3东4中5GOD
 	private static final int GROUP_ID_MAX = 5;
 	private int mPlayerId;
+	private boolean mIsOuted = false;
 	private HashMap<Integer, MahjUnitData> mUnitDatas = new HashMap<Integer, MahjUnitData>();
 	private int mMatchType;
 
@@ -78,6 +79,9 @@ public class MahjGroupData {
 	}
 
 	public void addOutData(MahjData data) {
+		if (!mIsOuted) {
+			mIsOuted = true;
+		}
 		mOutDatas.add(data);
 	}
 
@@ -222,7 +226,8 @@ public class MahjGroupData {
 		 * if (dataCount % 3 != 2) { return false; }
 		 */
 
-		if (mOperateType != MahjConstant.MAHJ_MATCH_TING) {
+		// 不听牌不能胡牌，天胡为特殊情况
+		if (mOperateType != MahjConstant.MAHJ_MATCH_TING && mIsOuted) {
 			return false;
 		}
 		
