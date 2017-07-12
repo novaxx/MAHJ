@@ -3,7 +3,6 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.MahjHandlerUtil;
 
@@ -80,7 +79,7 @@ public class MahjGroupData {
 
 	public void addOutData(MahjData data) {
 		if (!mIsOuted) {
-			mIsOuted = true;
+			setOuted(true);
 		}
 		mOutDatas.add(data);
 	}
@@ -163,6 +162,14 @@ public class MahjGroupData {
 		updateGroupData();
 
 		return isSuccess;
+	}
+	
+	public boolean isOuted() {
+		return mIsOuted;
+	}
+	
+	public void setOuted(boolean isOut) {
+		mIsOuted = isOut;
 	}
 	
 	public void setOperateType(int type) {

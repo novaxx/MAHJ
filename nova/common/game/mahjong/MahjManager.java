@@ -131,6 +131,11 @@ public class MahjManager {
 			Random random = new Random();
 			int position = random.nextInt(mMahjDatas.size());
 			mGodData = mMahjDatas.get(position).getIndex();
+			
+			if (TestMahjConstant.isDebug()) {
+				int[][] testDatas = TestMahjConstant.getDebugElements();
+				mGodData = testDatas[5][0];
+			}
 		}
 
 		for (int i = 0; i < 4; i++) {
