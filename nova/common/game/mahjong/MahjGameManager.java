@@ -136,6 +136,21 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		
 		if (operateType == MahjConstant.MAHJ_MATCH_HU) {
 			mMahjManager.getPlayerDatas().get(playerId).setOperateType(MahjConstant.MAHJ_MATCH_HU);
+			mStage.updateStage();
+			updateGameInfoForHandler();
+			return;
+		}
+		
+		if (mGameData.getCurrent() == playerId) {
+			if (operateType == MahjConstant.MAHJ_MATCH_GANG) {
+				ArrayList<Integer> gangList = mMahjManager.getPlayerDatas().get(playerId).getGangListFromDatas();
+				if (gangList != null && gangList.size() > 0) {
+					mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).operateGangData(gangList.get(0));
+					mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_GANG);
+					mStage.updateStage();
+					updateGameInfoForHandler();
+				}
+			}
 			return;
 		}
 		
