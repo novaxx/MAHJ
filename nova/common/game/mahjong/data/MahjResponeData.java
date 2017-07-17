@@ -3,9 +3,11 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nova.common.game.mahjong.handler.GameLogger;
+
 public class MahjResponeData {
 
-	private class MahjPartData {
+	public class MahjPartData {
 		private boolean isOuted;
 		private int operate;
 		private int latestData;
@@ -63,7 +65,7 @@ public class MahjResponeData {
 	private int current;
 	private int god;
 	private ArrayList<Integer> remainingDatas = new ArrayList<Integer>();
-	private HashMap<Integer, MahjPartData> partDatas = new HashMap<Integer, MahjPartData>();
+	private HashMap<String, MahjPartData> partDatas = new HashMap<String, MahjPartData>();
 	
 	public MahjResponeData(MahjGameData gameData, HashMap<Integer, MahjGroupData> groupDatas) {
 		banker = gameData.getBanker();
@@ -79,7 +81,7 @@ public class MahjResponeData {
 				continue;
 			}
 			
-			partDatas.put(i, new MahjPartData(groupDatas.get(i)));
+			partDatas.put(String.valueOf(i), new MahjPartData(groupDatas.get(i)));
 		}
 	}
 	
@@ -99,36 +101,7 @@ public class MahjResponeData {
 		return remainingDatas;
 	}
 	
-	public HashMap<Integer, MahjGroupData> getGroupDatas() {
-		HashMap<Integer, MahjGroupData> groupDatas = new HashMap<Integer, MahjGroupData>();
-		for (int i = 0; i < 4; i++) {
-			if (partDatas.get(i) == null) {
-				continue;
-			}
-			
-			MahjPartData partData = partDatas.get(i);
-			ArrayList<MahjData> datas = new ArrayList<MahjData>();
-			for (int index : partData.getDatas()) {
-				datas.add(new MahjData(index));
-			}
-			MahjGroupData groupData = new MahjGroupData(i, datas);
-			groupData.setLatestData(new MahjData(partData.getLatestData()));
-			ArrayList<MahjData> outdatas = new ArrayList<MahjData>();
-			for (int index : partData.getOutDatas()) {
-				outdatas.add(new MahjData(index));
-			}
-			groupData.setOutDatas(outdatas);
-			ArrayList<MahjData> matchdatas = new ArrayList<MahjData>();
-			for (int index : partData.getMatcheDatas()) {
-				matchdatas.add(new MahjData(index));
-			}
-			groupData.setOuted(partData.isOuted());
-			groupData.setMatchDatas(matchdatas);
-			groupData.updateGodData(god);
-			groupData.setOperateType(partData.getOperate());
-			groupDatas.put(i, groupData);
-		}
-		
-		return groupDatas;
+	public HashMap<String, MahjPartData> getPartDatas() {
+		return partDatas;
 	}
 }
