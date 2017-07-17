@@ -3,8 +3,6 @@ package nova.common.game.mahjong.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nova.common.game.mahjong.handler.GameLogger;
-
 public class MahjResponeData {
 
 	public class MahjPartData {

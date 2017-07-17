@@ -21,13 +21,17 @@ public class MahjResponeResolver {
 			MahjGroupData groupData = new MahjGroupData(i, datas);
 			groupData.setLatestData(new MahjData(partData.getLatestData()));
 			ArrayList<MahjData> outdatas = new ArrayList<MahjData>();
-			for (int index : partData.getOutDatas()) {
-				outdatas.add(new MahjData(index));
+			if (partData.getOutDatas() != null && partData.getOutDatas().size() > 0) {
+				for (int index : partData.getOutDatas()) {
+					outdatas.add(new MahjData(index));
+				}
 			}
 			groupData.setOutDatas(outdatas);
 			ArrayList<MahjData> matchdatas = new ArrayList<MahjData>();
-			for (int index : partData.getMatcheDatas()) {
-				matchdatas.add(new MahjData(index));
+			if (partData.getMatcheDatas() != null && partData.getMatcheDatas().size() > 0) {
+				for (int index : partData.getMatcheDatas()) {
+					matchdatas.add(new MahjData(index));
+				}
 			}
 			groupData.setOuted(partData.isOuted());
 			groupData.setMatchDatas(matchdatas);
