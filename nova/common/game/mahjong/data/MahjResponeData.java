@@ -10,8 +10,8 @@ public class MahjResponeData {
 		private int operate;
 		private int latestData;
 		private ArrayList<Integer> datas = new ArrayList<Integer>();
-		private ArrayList<Integer> matchedatas = new ArrayList<Integer>();
-		private ArrayList<Integer> outdatas = new ArrayList<Integer>();
+		private ArrayList<Integer> matcheDatas = new ArrayList<Integer>();
+		private ArrayList<Integer> outDatas = new ArrayList<Integer>();
 		
 		public MahjPartData(MahjGroupData groupData) {
 			isOuted = groupData.isOuted();
@@ -26,11 +26,11 @@ public class MahjResponeData {
 			}
 			
 			for (int i = 0; i < groupData.getMatchDatas().size(); i++) {
-				matchedatas.add(groupData.getMatchDatas().get(i).getIndex());
+				matcheDatas.add(groupData.getMatchDatas().get(i).getIndex());
 			}
 			
 			for (int i = 0; i < groupData.getOutDatas().size(); i++) {
-				outdatas.add(groupData.getOutDatas().get(i).getIndex());
+				outDatas.add(groupData.getOutDatas().get(i).getIndex());
 			}
 		}
 		
@@ -51,11 +51,11 @@ public class MahjResponeData {
 		}
 		
 		public  ArrayList<Integer> getMatcheDatas() {
-			return matchedatas;
+			return matcheDatas;
 		}
 		
 		public  ArrayList<Integer> getOutDatas() {
-			return outdatas;
+			return outDatas;
 		}
 	}
 	
