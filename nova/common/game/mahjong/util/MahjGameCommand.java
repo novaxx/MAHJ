@@ -2,11 +2,15 @@ package nova.common.game.mahjong.util;
 
 public class MahjGameCommand {
 
+	// 快速游戏
+	public static final int REQUEST_GAME_START = 1201;
 	// 开始游戏
-	public static final int COM_GAME_START = 1201;
-
+	public static final int REQUEST_ROOM_GAME_START = 1202;
 	// 出牌
-	public static final int COM_OUT_DATA = 1302;
-	// 
-	public static final int COM_OPERATE_DATA = 1303;
+	public static final int REQUEST_OUT_DATA = 1203;
+	// 操作
+	public static final int REQUEST_OPERATE_DATA = 1204;
+
+	// 游戏信息变化
+	public static final int RESPONE_GAME_INFO_UPDATE = 1250;
 }
