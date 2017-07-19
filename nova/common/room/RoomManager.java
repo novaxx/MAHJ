@@ -1,6 +1,6 @@
 package nova.common.room;
 
-import nova.common.game.GameManager;
+import nova.common.GameManager;
 import nova.common.room.data.RoomInfo;
 import nova.common.room.handler.RoomHandler;
 
@@ -44,7 +44,7 @@ public class RoomManager {
 		}
 	};
 
-	public RoomManager(int roomId, String gameType) {
+	public RoomManager(int roomId, int gameType) {
 		mRoomId = roomId;
 		mRoomInfo = new RoomInfo();
 		mGameManager = GameManager.createManager(roomId, gameType);

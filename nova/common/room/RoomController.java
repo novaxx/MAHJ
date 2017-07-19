@@ -13,15 +13,15 @@ public class RoomController {
 	public final static int FULL = -2;
 	public final static int RUNNING = -3;
 	private static final Object mLock = new Object();
-	private static HashMap<String, RoomController> mInstances = new HashMap<String, RoomController>();
+	private static HashMap<Integer, RoomController> mInstances = new HashMap<Integer, RoomController>();
 	private HashMap<Integer, RoomManager> mRoomManagers = new HashMap<Integer, RoomManager>();
-	private String mRoomtype;
+	private int mRoomtype;
 
-	private RoomController(String type) {
+	private RoomController(int type) {
 		mRoomtype = type;
 	}
 
-	public static RoomController getInstance(String type) {
+	public static RoomController getInstance(int type) {
 		synchronized (mLock) {
 			if (mInstances.get(type) == null) {
 				mInstances.put(type, new RoomController(type));

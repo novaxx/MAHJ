@@ -2,7 +2,7 @@ package nova.common.game.mahjong;
 
 import java.util.ArrayList;
 
-import nova.common.game.GameManager;
+import nova.common.GameManager;
 import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
