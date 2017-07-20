@@ -66,7 +66,7 @@ public class RoomManager {
 		return mGameManager;
 	}
 
-	public void setHandler(RoomHandler handler) {
+	public void setRoomHandler(RoomHandler handler) {
 		mRoomHandler = handler;
 	}
 
