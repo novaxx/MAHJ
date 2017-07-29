@@ -11,6 +11,11 @@ public class MahjGameCommand {
 	// 操作
 	public static final int REQUEST_OPERATE_DATA = 1204;
 
+	// 创建房间
+	public static final int REQUEST_ROOM_CREATE = 1221;
+	// 加入房间
+	public static final int REQUEST_ROOM_JOIN = 1222;
+	
 	// 游戏信息变化
 	public static final int RESPONE_GAME_INFO_UPDATE = 1250;
 	

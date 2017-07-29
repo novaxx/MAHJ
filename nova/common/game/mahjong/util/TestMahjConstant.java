@@ -5,7 +5,7 @@ public class TestMahjConstant {
 	private static boolean mIsDebug = false;
 	private static int mDebugType = 0;
 	
-	// MAHJ_ELEMENTS_DEBUG_1 : 起手杆
+	// MAHJ_ELEMENTS_DEBUG_1 : 起手杆/天胡
 	public final static int[][] MAHJ_ELEMENTS_DEBUG_1 = {
 			{1,1,1,1,2,3,4,5,6,7,8,9,9},
 			{11,11,11,11,12,13,14,15,16,17,18,19,19},
@@ -35,7 +35,7 @@ public class TestMahjConstant {
 			{43}
 	};
 	
-	// MAHJ_ELEMENTS_DEBUG_4 : 胡牌测试
+	// MAHJ_ELEMENTS_DEBUG_4 : 听牌/胡牌
 	public final static int[][] MAHJ_ELEMENTS_DEBUG_4 = {
 			{43,42,41,34,32,31,1,2,3,4,5,6,7},
 			{11,12,12,13,14,14,15,16,16,17,18,18,19},
