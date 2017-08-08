@@ -42,7 +42,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 			break;
 			
 		case MahjGameStage.MAHJ_END:
-			stopGame();
+			pauseGame();
 			break;
 
 		default:
@@ -104,6 +104,11 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		super.stopGame();
 		mLogger.d("zhangxx", "stopGame");
 		mStage.stop();
+	}
+	
+	public void pauseGame() {
+		mLogger.d("zhangxx", "pauseGame");
+		startGame();
 	}
 
 	@Override
@@ -204,7 +209,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		mMahjManager.updateOutData(playerId, outData);
 
 		if (mMahjManager.getMahjDatas().size() <= 0) {
-			stopGame();
+			pauseGame();
 		}
 	}
 

@@ -6,6 +6,8 @@ public class PlayerInfo {
 	private String name;
 	private String head;
 	private int sex;
+	private int vip;
+	private int gold;
 	// 0: player 1: android
 	private int type;
 
@@ -52,6 +54,22 @@ public class PlayerInfo {
 		return sex;
 	}
 
+	public int getVip() {
+		return vip;
+	}
+
+	public void setVip(int vip) {
+		this.vip = vip;
+	}
+
+	public int getGold() {
+		return gold;
+	}
+
+	public void setGold(int gold) {
+		this.gold = gold;
+	}
+	
 	public void setType(int type) {
 		this.type = type;
 	}
