@@ -23,4 +23,12 @@ public class MahjGameCommand {
 	
 	// 房间信息变化
 	public static final int RESPONE_ROOM_INFO_UPDATE = 1290;
+	// 房间状态变化
+	public static final int RESPONE_ROOM_STATE_UPDATE = 1291;
+	
+	public class RoomState {
+		public static final int ROOM_STATE_FAIL = -1;
+		public static final int ROOM_STATE_JOIN = 1;
+		public static final int ROOM_STATE_GAME_START = 2;
+	}
 }
