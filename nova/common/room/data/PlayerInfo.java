@@ -3,12 +3,18 @@ package nova.common.room.data;
 public class PlayerInfo {
 
 	private int id;
+	private String openId;
 	private String name;
 	private String head;
+	/**
+	 *  0:boy, 1:girl
+	 */
 	private int sex;
 	private int vip;
 	private int gold;
-	// 0: player 1: android
+	/**
+	 * 0: player 1: android
+	 */
 	private int type;
 
 	public PlayerInfo() {
@@ -28,6 +34,14 @@ public class PlayerInfo {
 
 	public int getId() {
 		return this.id;
+	}
+	
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+	
+	public String getOpenId() {
+		return this.openId;
 	}
 
 	public void setName(String name) {
