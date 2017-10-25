@@ -6,6 +6,7 @@ public class PlayerInfo {
 	private String openId;
 	private String name;
 	private String head;
+	private byte[] headdatas;
 	/**
 	 *  0:boy, 1:girl
 	 */
@@ -58,6 +59,14 @@ public class PlayerInfo {
 
 	public String getHead() {
 		return this.head;
+	}
+	
+	public void setHeaddatas(byte[] headdatas) {
+		this.headdatas = headdatas;
+	}
+	
+	public byte[] getHeaddatas() {
+		return this.headdatas;
 	}
 
 	public void setSex(int sex) {
