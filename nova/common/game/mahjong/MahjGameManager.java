@@ -2,6 +2,7 @@ package nova.common.game.mahjong;
 
 import java.util.ArrayList;
 
+import nova.common.GameCommand;
 import nova.common.GameManager;
 import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
@@ -11,6 +12,7 @@ import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
 import nova.common.game.mahjong.util.MahjConstant;
+import nova.common.room.RoomController;
 
 public class MahjGameManager extends GameManager implements StageCallBack, MahjGameDispatcher {
 
@@ -73,6 +75,13 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	@Override
 	public void onTimeChange() {
 		mMahjManager.clearOperateType();
+	}
+	
+	@Override
+	public boolean isAutoOperator() {
+		int type = RoomController.getInstance(GameCommand.GAME_TYPE_MAHJ).getRoomManager(mRoomId)
+				.getRoomInfo().getPlayer(mGameData.getCurrent()).getType();
+		return type == 1;
 	}
 
 	public void setLogger(GameLogger logger) {

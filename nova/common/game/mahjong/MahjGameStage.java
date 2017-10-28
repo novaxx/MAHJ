@@ -11,6 +11,7 @@ public class MahjGameStage {
 		public int getOperateType();
 		public void onDataOutEnd(boolean isMatched);
 		public void onTimeChange();
+		public boolean isAutoOperator();
 	}
 
 	public static final int MAHJ_INIT = 0;
@@ -132,7 +133,11 @@ public class MahjGameStage {
 		case MATCH_MAHJ_WAIT:
 			return 3;
 		case OUT_MAHJ_WAIT:
-			return 3;
+			if (mStageHandler.isAutoOperator()) {
+				return 3;
+			} else {
+				return 20;
+			}
 		default:
 			break;
 		}
