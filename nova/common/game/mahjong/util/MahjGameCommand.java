@@ -10,7 +10,9 @@ public class MahjGameCommand {
 	public static final int REQUEST_OUT_DATA = 1203;
 	// 操作
 	public static final int REQUEST_OPERATE_DATA = 1204;
-
+	// 退出游戏
+	public static final int REQUEST_GAME_STOP = 1205;
+	
 	// 创建房间
 	public static final int REQUEST_ROOM_CREATE = 1221;
 	// 加入房间
