@@ -12,7 +12,9 @@ public class PlayerInfo {
 	 */
 	private int sex;
 	private int vip;
+	private int lv;
 	private int gold;
+	private int crys;
 	/**
 	 * 0: player 1: android
 	 */
@@ -84,6 +86,14 @@ public class PlayerInfo {
 	public void setVip(int vip) {
 		this.vip = vip;
 	}
+	
+	public int getLv() {
+		return this.lv;
+	}
+
+	public void setLv(int lv) {
+		this.lv = lv;
+	}
 
 	public int getGold() {
 		return gold;
@@ -91,6 +101,14 @@ public class PlayerInfo {
 
 	public void setGold(int gold) {
 		this.gold = gold;
+	}
+	
+	public int getCrys() {
+		return this.crys;
+	}
+
+	public void setCrys(int crys) {
+		this.crys = crys;
 	}
 	
 	public void setType(int type) {
