@@ -3,6 +3,7 @@ package nova.common.room;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import nova.common.game.mahjong.handler.GameLogger;
@@ -14,6 +15,9 @@ public class RoomController {
 	public final static int NO_ROOM = -1;
 	public final static int FULL = -2;
 	public final static int RUNNING = -3;
+	
+	private static final int TEAM_ROOM_MAX = 100000;
+	
 	private static final Object mLock = new Object();
 	private static HashMap<Integer, RoomController> mInstances = new HashMap<Integer, RoomController>();
 	private HashMap<Integer, RoomManager> mRoomManagers = new HashMap<Integer, RoomManager>();
@@ -65,8 +69,8 @@ public class RoomController {
 		}
 	}
 
-	public int joinRoom(PlayerInfo player) {
-		int roomId = searchLiveRoom(player.getId());
+	public int searchSuitableRoom(PlayerInfo player) {
+		int roomId = searchLocationRoomForPlayerId(player.getId());
 		if (roomId < 0) {
 			roomId = searchFreeRoom();
 		}
@@ -75,7 +79,9 @@ public class RoomController {
 	}
 
 	public int joinRoom(int roomId, PlayerInfo player) {
-		if (mRoomManagers.get(roomId) == null) {
+		// 组队游戏的房间号区间为 TEAM_ROOM_MAX - 2*TEAM_ROOM_MAX
+		if ((roomId < TEAM_ROOM_MAX || roomId >= 2 * TEAM_ROOM_MAX)
+				||mRoomManagers.get(roomId) == null) {
 			return NO_ROOM;
 		}
 
@@ -104,7 +110,7 @@ public class RoomController {
 		}
 
 		mRoomManagers.get(roomId).getRoomInfo().removePlayer(player);
-		
+		GameLogger.getInstance().i(TAG, "leaveRoom, roomId " + roomId + ", leftplayers : " + mRoomManagers.get(roomId).getRoomInfo().getPlayers().size());
 		if (mRoomManagers.get(roomId).getRoomInfo().getPlayers().size() <= 0) {
 			cleanRoom(roomId);
 		}
@@ -118,11 +124,12 @@ public class RoomController {
 		}
 
 		mRoomManagers.remove(roomId);
+		GameLogger.getInstance().i(TAG, "cleanRoom  " + roomId + (mRoomManagers.get(roomId) != null ? " failed!" : " success!"));	
 		return 0;
 	}
 
 	@SuppressWarnings("rawtypes")
-	private int searchLiveRoom(int playerId) {
+	private int searchLocationRoomForPlayerId(int playerId) {
 		Set set = mRoomManagers.entrySet();
 		Iterator it = set.iterator();
 		while (it.hasNext()) {
@@ -135,7 +142,7 @@ public class RoomController {
 	}
 
 	private int searchFreeRoom() {
-		for (int i = 0; i < Integer.MAX_VALUE; i++) {
+		for (int i = 2 * TEAM_ROOM_MAX + 1; i < Integer.MAX_VALUE; i++) {
 			RoomManager roomManager = getRoomManager(i);
 			RoomInfo room = roomManager.getRoomInfo();
 			if (room.isPlayerFilled() || room.isRunning()) {
@@ -149,13 +156,16 @@ public class RoomController {
 	}
 
 	private int searchEmptyRoom() {
-		for (int i = 0; i < Integer.MAX_VALUE; i++) {
-			if (mRoomManagers.get(i) == null) {
-				mRoomManagers.put(i, new RoomManager(i, mRoomtype));
-				return i;
+		Random random = new Random();
+		int roomId = -1;
+		while (true) {
+			roomId = random.nextInt(TEAM_ROOM_MAX) % TEAM_ROOM_MAX + TEAM_ROOM_MAX;
+			if (mRoomManagers.get(roomId) == null) {
+				mRoomManagers.put(roomId, new RoomManager(roomId, mRoomtype));
+				break;
 			}
 		}
-
-		return -1;
+		
+		return roomId;
 	}
 }

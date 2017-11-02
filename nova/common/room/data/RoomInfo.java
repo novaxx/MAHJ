@@ -38,6 +38,10 @@ public class RoomInfo {
 
 	public void removePlayer(PlayerInfo player) {
 		for (int i = 0; i < PLAYER_MAX; i++) {
+			if (mPlayers.get(i) == null) {
+				continue;
+			}
+			
 			if (mPlayers.get(i).getId() == player.getId()) {
 				mPlayers.remove(i);
 				break;

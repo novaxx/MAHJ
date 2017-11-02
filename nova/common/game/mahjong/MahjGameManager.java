@@ -13,6 +13,7 @@ import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.room.RoomController;
+import nova.common.room.data.PlayerInfo;
 
 public class MahjGameManager extends GameManager implements StageCallBack, MahjGameDispatcher {
 
@@ -79,8 +80,13 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	
 	@Override
 	public boolean isAutoOperator() {
-		int type = RoomController.getInstance(GameCommand.GAME_TYPE_MAHJ).getRoomManager(mRoomId)
-				.getRoomInfo().getPlayer(mGameData.getCurrent()).getType();
+		PlayerInfo player = RoomController.getInstance(GameCommand.GAME_TYPE_MAHJ).getRoomManager(mRoomId)
+				.getRoomInfo().getPlayer(mGameData.getCurrent());
+		if (player == null) {
+			return true;
+		}
+		
+		int type = player.getType();
 		return type == 1;
 	}
 
