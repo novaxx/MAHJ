@@ -2,8 +2,10 @@ package nova.common.room.data;
 
 import java.util.HashMap;
 
-public class RoomInfo {
+import nova.common.game.mahjong.handler.GameLogger;
 
+public class RoomInfo {
+	private static final String TAG = "RoomInfo";
 	private boolean mIsRunning;
 	private HashMap<Integer, PlayerInfo> mPlayers = new HashMap<Integer, PlayerInfo>();
 
@@ -65,16 +67,34 @@ public class RoomInfo {
 	}
 
 	public PlayerInfo getPlayer(int id) {
+		if (id < 0 || id >= 4) {
+			GameLogger.getInstance().e(TAG, "getPlayer error : index " + id + " is anomaly value !!!");
+			return null;
+		}
 		return mPlayers.get(id);
 	}
-
-	public boolean containPlayer(int id) {
+	
+	public int getIndexForPlayerId(int playerId) {
 		for (int i = 0; i < PLAYER_MAX; i++) {
 			if (mPlayers.get(i) == null) {
 				continue;
 			}
 
-			if (mPlayers.get(i).getId() == id) {
+			if (mPlayers.get(i).getId() == playerId) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+
+	public boolean containPlayer(int playerId) {
+		for (int i = 0; i < PLAYER_MAX; i++) {
+			if (mPlayers.get(i) == null) {
+				continue;
+			}
+
+			if (mPlayers.get(i).getId() == playerId) {
 				return true;
 			}
 		}
@@ -84,6 +104,18 @@ public class RoomInfo {
 
 	public boolean isPlayerFilled() {
 		return mPlayers.size() >= PLAYER_MAX;
+	}
+	
+	public void updateTypeForPlayer(int playerId, boolean isAuto) {
+		for (int i = 0; i < PLAYER_MAX; i++) {
+			if (mPlayers.get(i) == null) {
+				continue;
+			}
+
+			if (mPlayers.get(i).getId() == playerId) {
+				mPlayers.get(i).setType(isAuto ? 1 : 0);
+			}
+		}
 	}
 
 	public boolean isNormalPlayer(int id) {

@@ -5,10 +5,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.room.data.PlayerInfo;
 import nova.common.room.data.RoomInfo;
 
 public class RoomController {
+	private static final String TAG = "RoomController";
 	public final static int NO_ROOM = -1;
 	public final static int FULL = -2;
 	public final static int RUNNING = -3;
@@ -35,6 +37,32 @@ public class RoomController {
 			mRoomManagers.put(roomId, new RoomManager(roomId, mRoomtype));
 		}
 		return mRoomManagers.get(roomId);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void updateRoomManagerForPlayerOffline(int playerId) {
+		Set set = mRoomManagers.entrySet();
+		Iterator it=set.iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry)it.next();
+			RoomManager roomManager = (RoomManager)entry.getValue();
+			if (roomManager.getRoomInfo().containPlayer(playerId)) {
+				int roomId = (Integer)(entry.getKey());
+				if (roomManager.getRoomInfo().isRunning()) {
+					roomManager.getRoomInfo().updateTypeForPlayer(playerId, true);
+					GameLogger.getInstance().i(TAG, "updateRoomManagerForPlayerOffline set palyer auto success, playerId : " + roomId + ", playerId : " + playerId);
+				} else {
+					int index = roomManager.getRoomInfo().getIndexForPlayerId(playerId);
+					if (index >= 0) {
+						leaveRoom(roomId, roomManager.getRoomInfo().getPlayer(index));
+						GameLogger.getInstance().i(TAG, "updateRoomManagerForPlayerOffline leave room success, room : " + roomId + ", playerId : " + playerId);
+					} else {
+						GameLogger.getInstance().e(TAG, "updateRoomManagerForPlayerOffline error : index " + index + " is anomaly value !!!");
+					}
+				}
+				return;
+			}
+		}
 	}
 
 	public int joinRoom(PlayerInfo player) {
@@ -71,11 +99,16 @@ public class RoomController {
 	}
 
 	public int leaveRoom(int roomId, PlayerInfo player) {
-		if (mRoomManagers.get(roomId) == null) {
+		if (mRoomManagers.get(roomId) == null || player == null) {
 			return -1;
 		}
 
 		mRoomManagers.get(roomId).getRoomInfo().removePlayer(player);
+		
+		if (mRoomManagers.get(roomId).getRoomInfo().getPlayers().size() <= 0) {
+			cleanRoom(roomId);
+		}
+		
 		return 0;
 	}
 
