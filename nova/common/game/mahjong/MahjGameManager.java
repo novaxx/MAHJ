@@ -80,7 +80,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	
 	@Override
 	public boolean isAutoOperator() {
-		PlayerInfo player = RoomController.getInstance(GameCommand.GAME_TYPE_MAHJ).getRoomManager(mRoomId)
+		PlayerInfo player = RoomController.getInstance(GameCommand.MAHJ_TYPE_GAME).getRoomManager(mRoomId)
 				.getRoomInfo().getPlayer(mGameData.getCurrent());
 		if (player == null) {
 			return true;
@@ -128,6 +128,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 	@Override
 	public void activeOutData(int playerId, int dataIndex) {
+		mLogger.d("zhangxx", "activeOutData, current : " + mGameData.getCurrent() + ", playerId : " + playerId + ", dataIndex : " + dataIndex);
 		if (mGameData.getCurrent() != playerId) {
 			return;
 		}
@@ -143,6 +144,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 	@Override
 	public void activeOperateData(int playerId, int operateType) {
+		mLogger.d("zhangxx", "activeOperateData, current : " + mGameData.getCurrent() + ", playerId : " + playerId + ", operateType : " + operateType);
 		if (operateType != MahjConstant.MAHJ_MATCH_PENG && operateType != MahjConstant.MAHJ_MATCH_GANG 
 				&& operateType != MahjConstant.MAHJ_MATCH_CHI && operateType != MahjConstant.MAHJ_MATCH_TING
 				&& operateType != MahjConstant.MAHJ_MATCH_HU) {
@@ -222,6 +224,8 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 	private void updateOutData(int playerId, MahjData outData) {
 		mMahjManager.updateOutData(playerId, outData);
+		// 更新出牌的玩家
+		mGameData.setLastout(playerId);
 
 		if (mMahjManager.getMahjDatas().size() <= 0) {
 			pauseGame();
@@ -237,5 +241,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	private void updateMatchData(int playerId, int matchType) {
 		mMahjManager.obtainMatchData(playerId, mGameData.getCurrent(), matchType);
 		mGameData.setCurrent(playerId);
+		// 清空出牌的玩家
+		mGameData.clearLastout();
 	}
 }

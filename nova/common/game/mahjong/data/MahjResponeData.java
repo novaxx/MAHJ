@@ -61,6 +61,7 @@ public class MahjResponeData {
 	
 	private int banker;
 	private int current;
+	private int lastout;
 	private int god;
 	private ArrayList<Integer> remainingDatas = new ArrayList<Integer>();
 	private HashMap<String, MahjPartData> partDatas = new HashMap<String, MahjPartData>();
@@ -68,6 +69,7 @@ public class MahjResponeData {
 	public MahjResponeData(MahjGameData gameData, HashMap<Integer, MahjGroupData> groupDatas) {
 		banker = gameData.getBanker();
 		current = gameData.getCurrent();
+		lastout = gameData.getLastout();
 		god = gameData.getGod();
 		
 		for (int i = 0; i < gameData.getDatas().size(); i++) {
@@ -89,6 +91,10 @@ public class MahjResponeData {
 	
 	public int getCurrent() {
 		return current;
+	}
+	
+	public int getLastout() {
+		return lastout;
 	}
 	
 	public int getGod() {

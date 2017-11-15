@@ -50,9 +50,7 @@ public class MahjManager {
 
 	public void clearOperateType() {
 		for (int i = 0; i < 4; i++) {
-			if (mPlayerGroupDatas.get(i).getOperateType() < MahjConstant.MAHJ_MATCH_TING) {
-				mPlayerGroupDatas.get(i).setOperateType(0);
-			}
+		    mPlayerGroupDatas.get(i).clearOperateType();
 		}
 	}
 

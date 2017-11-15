@@ -8,7 +8,7 @@ public class GameManager {
 	
 	public static GameManager createManager(int roomId, int gameType) {
 		switch (gameType) {
-		case GameCommand.GAME_TYPE_MAHJ:
+		case GameCommand.MAHJ_TYPE_GAME:
 			return new MahjGameManager(roomId);
 
 		default:

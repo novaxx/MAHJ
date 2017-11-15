@@ -6,12 +6,14 @@ public class MahjGameData {
 
 	private int banker;
 	private int current;
+	private int lastout;
 	private int god;
 	private ArrayList<MahjData> datas;
 	
 	public void initDatas() {
 		banker = 0;
 		current = 0;
+		lastout = -1;
 	}
 	
 	public void setBanker(int banker) {
@@ -32,6 +34,18 @@ public class MahjGameData {
 	
 	public int getCurrent() {
 		return this.current;
+	}
+	
+	public void setLastout(int lastout) {
+		this.lastout = lastout;
+	}
+	
+	public int getLastout() {
+		return this.lastout;
+	}
+	
+	public void clearLastout() {
+		this.lastout = -1;
 	}
 	
 	public void setGod(int god) {

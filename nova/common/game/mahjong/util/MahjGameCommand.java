@@ -28,6 +28,19 @@ public class MahjGameCommand {
 	// 房间状态变化
 	public static final int RESPONE_ROOM_STATE_UPDATE = 1291;
 	
+	// 发送消息
+	public static final int RESPONE_SEND_MESSAGE = 9000;
+	// 发送语音
+	public static final int RESPONE_SEND_VOICE = 9001;
+	// 发送消息
+	public static final int RESPONE_SEND_MESSAGE_VOICE = 9002;
+	
+	public class MessageType {
+		public static final int TYPE_MESSAGE = 0;
+		public static final int TYPE_VOICE = 1;
+		public static final int TYPE_MESSAGE_VOICE = 2;
+	}
+	
 	public class RoomState {
 		public static final int ROOM_STATE_FAIL = -1;
 		public static final int ROOM_STATE_JOIN = 1;

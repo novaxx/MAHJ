@@ -99,7 +99,7 @@ public class MahjGroupData {
 	}
 
 	public boolean containData(final int index) {
-		if (mLatestData.getIndex() == index) {
+		if (mLatestData != null && mLatestData.getIndex() == index) {
 			return true;
 		}
 		
@@ -173,7 +173,19 @@ public class MahjGroupData {
 	}
 	
 	public void setOperateType(int type) {
-		mOperateType = type;
+		mOperateType = mOperateType | type;
+	}
+	
+	/**
+	 * 没有听和胡时，清空operateType
+	 * 有听和胡时，清掉其他operateType, 保留听和胡
+	 */
+	public void clearOperateType() {
+		if (mOperateType < MahjConstant.MAHJ_MATCH_TING) {
+			mOperateType = 0;
+		} else {
+			mOperateType = mOperateType & (MahjConstant.MAHJ_MATCH_TING + MahjConstant.MAHJ_MATCH_HU);
+		}
 	}
 	
 	public int getOperateType() {
