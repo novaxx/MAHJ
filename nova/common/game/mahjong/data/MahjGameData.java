@@ -5,15 +5,18 @@ import java.util.ArrayList;
 public class MahjGameData {
 
 	private int banker;
+	private int winner;
 	private int current;
 	private int lastout;
 	private int god;
-	private ArrayList<MahjData> datas;
+	private ArrayList<MahjData> datas = new ArrayList<MahjData>();
 	
 	public void initDatas() {
 		banker = 0;
 		current = 0;
 		lastout = -1;
+		winner = -1;
+		datas.clear();
 	}
 	
 	public void setBanker(int banker) {
@@ -22,6 +25,14 @@ public class MahjGameData {
 	
 	public int getBanker() {
 		return this.banker;
+	}
+	
+	public void setWinner(int winner) {
+		this.winner = winner;
+	}
+	
+	public int getWinner() {
+		return this.winner;
 	}
 	
 	public void setCurrent(int current) {

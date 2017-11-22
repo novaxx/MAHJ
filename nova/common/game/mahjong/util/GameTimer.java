@@ -1,7 +1,6 @@
 package nova.common.game.mahjong.util;
 
-
-public class GameTimer implements Runnable {
+public class GameTimer extends Thread {
 	
 	private TimerCallback mCallback;
 	private boolean mRunning = false;
@@ -13,7 +12,9 @@ public class GameTimer implements Runnable {
 	@Override
 	public void run() {
 		while (mRunning) {
-			mCallback.handleMessage();
+			if (mCallback != null) {
+				mCallback.handleMessage();
+			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -29,12 +30,13 @@ public class GameTimer implements Runnable {
 		mCallback = callback;
 	}
 	
-	public void start() {
+	public void startTimer() {
 		mRunning = true;
-		new Thread(this).start();
+		start();
 	}
 	
-	public void stop() {
+	public void stopTimer() {
 		mRunning = false;
+		mCallback = null;
 	}
 }

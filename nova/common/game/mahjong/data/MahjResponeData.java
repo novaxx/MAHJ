@@ -60,6 +60,7 @@ public class MahjResponeData {
 	}
 	
 	private int banker;
+	private int winner;
 	private int current;
 	private int lastout;
 	private int god;
@@ -68,6 +69,7 @@ public class MahjResponeData {
 	
 	public MahjResponeData(MahjGameData gameData, HashMap<Integer, MahjGroupData> groupDatas) {
 		banker = gameData.getBanker();
+		winner = gameData.getWinner();
 		current = gameData.getCurrent();
 		lastout = gameData.getLastout();
 		god = gameData.getGod();
@@ -87,6 +89,10 @@ public class MahjResponeData {
 	
 	public int getBanker() {
 		return banker;
+	}
+	
+	public int getWinner() {
+		return winner;
 	}
 	
 	public int getCurrent() {

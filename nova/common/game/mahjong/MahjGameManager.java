@@ -89,6 +89,11 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		int type = player.getType();
 		return type == 1;
 	}
+	
+	@Override
+	public boolean hasNoMahj() {
+		return mMahjManager.getMahjDatas().size() <= 0;
+	}
 
 	public void setLogger(GameLogger logger) {
 		mLogger = logger;
@@ -101,19 +106,26 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	public MahjGameManager(int roomId) {
 		super(roomId);
 		mRoomId = roomId;
-		mMahjManager = new MahjManager();
+		/*mMahjManager = new MahjManager();
 		mGameData = new MahjGameData();
 		mStage = new MahjGameStage();
-		mStage.setStageHandler(this);
+		mStage.setStageHandler(this);*/
 	}
 
 	@Override
 	public void startGame() {
 		super.startGame();
+		mLogger.d("zhangxx", "startGame");
 		initGameData();
 		mStage.start();
 	}
 
+	@Override
+	public void resumeGame() {
+		super.resumeGame();
+		startGame();
+	}
+	
 	@Override
 	public void stopGame() {
 		super.stopGame();
@@ -121,9 +133,11 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		mStage.stop();
 	}
 	
+	@Override
 	public void pauseGame() {
+		super.pauseGame();
 		mLogger.d("zhangxx", "pauseGame");
-		startGame();
+		mStage.stop();
 	}
 
 	@Override
@@ -158,6 +172,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		
 		if (operateType == MahjConstant.MAHJ_MATCH_HU) {
 			mMahjManager.getPlayerDatas().get(playerId).setOperateType(MahjConstant.MAHJ_MATCH_HU);
+			mGameData.setWinner(playerId);
 			mStage.updateStage();
 			updateGameInfoForHandler();
 			return;
@@ -187,9 +202,18 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	}
 
 	private void initGameData() {
+		int banker = 0;
+		if (mGameData != null) {
+			banker = mGameData.getBanker();
+		}
+		mMahjManager = new MahjManager();
+		mGameData = new MahjGameData();
 		mMahjManager.initDatas();
 		mGameData.initDatas();
+		mGameData.setBanker(banker);
 		mGameData.setDatas(mMahjManager.getMahjDatas());
+		mStage = new MahjGameStage();
+		mStage.setStageHandler(this);
 		updateGameInfoForHandler();
 	}
 
@@ -207,6 +231,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		// 胡牌
 		if (mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).isHuEnable()) {
 			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_HU);
+			mGameData.setWinner(mGameData.getCurrent());
 			return;
 		}
 		
@@ -228,7 +253,9 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		mGameData.setLastout(playerId);
 
 		if (mMahjManager.getMahjDatas().size() <= 0) {
-			pauseGame();
+			// pauseGame();
+			// 平局
+			mGameData.setWinner(5);
 		}
 	}
 

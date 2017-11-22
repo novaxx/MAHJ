@@ -1,5 +1,6 @@
 package nova.common.game.mahjong;
 
+import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.util.GameTimer;
 import nova.common.game.mahjong.util.MahjConstant;
 import nova.common.game.mahjong.util.TimerCallback;
@@ -12,6 +13,7 @@ public class MahjGameStage {
 		public void onDataOutEnd(boolean isMatched);
 		public void onTimeChange();
 		public boolean isAutoOperator();
+		public boolean hasNoMahj();
 	}
 
 	public static final int MAHJ_INIT = 0;
@@ -37,36 +39,41 @@ public class MahjGameStage {
 				mDuration++;
 				return;
 			}
-
 			mStageHandler.onStageEnd(mGameStage);
 			updateStage();
 		}
 	};
 
 	public MahjGameStage() {
-		mTimer = new GameTimer(mCallback);
+		// mTimer = new GameTimer(mCallback);
 	}
 
 	public void start() {
-		if (!mTimer.isRunning()) {
-			cleanStageTime();
-			mTimer.start();
+		if (mTimer != null && mTimer.isRunning()) {
+			GameLogger.getInstance().e("MahjGameStage", "start error : game is started!!");
+			return;
 		}
+
+		cleanStageTime();
+		mTimer = new GameTimer(mCallback);
+		mTimer.startTimer();
 	}
 
 	public void restart() {
-		if (mTimer.isRunning()) {
-			mTimer.stop();
+		if (mTimer != null && mTimer.isRunning()) {
+			mTimer.stopTimer();
+			mTimer = null;
 		}
+		
 		cleanStageTime();
 		mTimer = new GameTimer(mCallback);
-		mTimer.start();
+		mTimer.startTimer();
 	}
 
 	public void stop() {
-		if (mTimer.isRunning()) {
-			mTimer.stop();
-		}
+		mTimer.stopTimer();
+		mTimer = null;
+		mGameStage = 0;
 		cleanStageTime();
 	}
 
@@ -89,7 +96,8 @@ public class MahjGameStage {
 			break;
 
 		case OUT_MAHJ_WAIT:
-			if ((mStageHandler.getOperateType() & MahjConstant.MAHJ_MATCH_HU) == MahjConstant.MAHJ_MATCH_HU) {
+			if ((mStageHandler.getOperateType() & MahjConstant.MAHJ_MATCH_HU) == MahjConstant.MAHJ_MATCH_HU
+			|| mStageHandler.hasNoMahj()) {
 				mGameStage = MAHJ_END;
 			} else if ((mStageHandler.getOperateType() & MahjConstant.MAHJ_MATCH_GANG) == MahjConstant.MAHJ_MATCH_GANG) {
 				mGameStage = GET_MAHJ_WAIT;

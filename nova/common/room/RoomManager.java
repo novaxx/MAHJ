@@ -82,6 +82,10 @@ public class RoomManager {
 		mRoomInfo.removeAllPlayer();
 		mGameManager.stopGame();
 	}
+	
+	public void resumeGame() {
+		mGameManager.resumeGame();
+	}
 
 	public boolean isPlayerFilled() {
 		return mRoomInfo.isPlayerFilled();

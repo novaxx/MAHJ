@@ -24,7 +24,15 @@ public class GameManager {
 		
 	}
 	
+	public void resumeGame() {
+		
+	}
+	
 	public void stopGame() {
+		
+	}
+	
+	public void pauseGame() {
 		
 	}
 }
