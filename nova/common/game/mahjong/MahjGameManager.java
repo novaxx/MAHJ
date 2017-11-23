@@ -161,7 +161,15 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		mLogger.d("zhangxx", "activeOperateData, current : " + mGameData.getCurrent() + ", playerId : " + playerId + ", operateType : " + operateType);
 		if (operateType != MahjConstant.MAHJ_MATCH_PENG && operateType != MahjConstant.MAHJ_MATCH_GANG 
 				&& operateType != MahjConstant.MAHJ_MATCH_CHI && operateType != MahjConstant.MAHJ_MATCH_TING
-				&& operateType != MahjConstant.MAHJ_MATCH_HU) {
+				&& operateType != MahjConstant.MAHJ_MATCH_HU && operateType != MahjConstant.MAHJ_MATCH_GUO) {
+			return;
+		}
+		
+		if (operateType == MahjConstant.MAHJ_MATCH_GUO) {
+			// 清空玩家match标记
+			mMahjManager.getPlayerDatas().get(playerId).updateMatchType(null);
+			mStage.updateStage();
+			updateGameInfoForHandler();
 			return;
 		}
 		

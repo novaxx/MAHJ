@@ -310,12 +310,41 @@ public class MahjGroupData {
 	 * 万／千／百／十／个 胡／听／杆／碰／吃
 	 */
 	private int getMatchTypeForData(MahjData data) {
+		if (!isDataMatchAllowed(data)) {
+			return 0;
+		}
+		
 		int groupId = getGroupIdByData(data);
 		if (mUnitDatas.get(groupId) != null) {
 			return mUnitDatas.get(groupId).getMatchType(data);
 		}
 
 		return 0;
+	}
+	
+	/**
+	 * 当前的牌是否允许碰杆
+	 * 已有其他花色牌碰杆，不允许
+	 * 其他已碰杆花色牌为赖子，允许
+	 */
+	private boolean isDataMatchAllowed(MahjData data) {
+		boolean isAllowed = true;
+		
+		// 东/南/西/中/发/白/赖子 始终允许
+		if (getGroupIdByData(data) > 2) {
+			return isAllowed;
+		}
+		
+		for (MahjData tmpData : mMatchDatas) {
+			if (tmpData.getIndex() != mGodIndex
+					&& getGroupIdByData(tmpData) <= 2
+					&& getGroupIdByData(tmpData) != getGroupIdByData(data)) {
+				isAllowed = false;
+				break;
+			}
+		}
+		
+		return isAllowed;
 	}
 
 	private void moveLatestDataToDatas() {
