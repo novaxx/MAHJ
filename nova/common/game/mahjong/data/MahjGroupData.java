@@ -241,9 +241,12 @@ public class MahjGroupData {
 	}
 	
 	public boolean isHuEnable() {
-		int dataCount = mDatas.size() + (mLatestData != null ? 1 : 0);
+		int dataCount = mDatas.size();
+		if (mLatestData != null && mLatestData.getIndex() > 0) {
+			dataCount += 1;
+		}
 		/**
-		 * 牌数不对(不包括碰，杆)，不能胡牌，胡牌牌数：14, 11, 8, 5, 2
+		 * 牌数不对(不包括碰，杆)，不能胡牌，胡牌牌数：14, 11,  8, 5, 2
 		 */
 		if (dataCount % 3 != 2) {
 			return false;
