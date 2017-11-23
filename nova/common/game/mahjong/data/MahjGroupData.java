@@ -241,9 +241,13 @@ public class MahjGroupData {
 	}
 	
 	public boolean isHuEnable() {
-		/*
-		 * if (dataCount % 3 != 2) { return false; }
+		int dataCount = mDatas.size() + (mLatestData != null ? 1 : 0);
+		/**
+		 * 牌数不对(不包括碰，杆)，不能胡牌，胡牌牌数：14, 11, 8, 5, 2
 		 */
+		if (dataCount % 3 != 2) {
+			return false;
+		}
 
 		// 不听牌不能胡牌，天胡为特殊情况
 		if (mOperateType != MahjConstant.MAHJ_MATCH_TING && mIsOuted) {

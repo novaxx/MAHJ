@@ -11,7 +11,11 @@ public class MahjGameData {
 	private int god;
 	private ArrayList<MahjData> datas = new ArrayList<MahjData>();
 	
-	public void initDatas() {
+	public MahjGameData() {
+		initDatas();
+	}
+	
+	private void initDatas() {
 		banker = 0;
 		current = 0;
 		lastout = -1;

@@ -207,13 +207,15 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 			banker = mGameData.getBanker();
 		}
 		mMahjManager = new MahjManager();
-		mGameData = new MahjGameData();
 		mMahjManager.initDatas();
-		mGameData.initDatas();
+		
+		mGameData = new MahjGameData();
 		mGameData.setBanker(banker);
 		mGameData.setDatas(mMahjManager.getMahjDatas());
+		
 		mStage = new MahjGameStage();
 		mStage.setStageHandler(this);
+		
 		updateGameInfoForHandler();
 	}
 
