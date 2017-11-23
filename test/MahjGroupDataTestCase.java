@@ -13,6 +13,19 @@ public class MahjGroupDataTestCase extends TestCase {
 			"43,43,42,42,41,41,12,12,12,11,13,14,15",
 	};
 	
+	private static final String[][] TEST_MATCH_DATA = {
+			/**{"god", "matchDatas", "datas", "outdata", "expected"}**/
+			{"16", "", "43,42,41,33,32,31,29,28,27,27,27,25,24", "27", "6"},
+			{"16", "", "43,42,41,33,32,31,29,28,27,27,26,25,24", "27", "2"},
+			{"16", "43,43,43", "43,42,41,33,32,31,29,28,27,27", "27", "2"},
+			{"16", "14,14,14", "43,42,41,33,32,31,29,28,27,27", "27", "0"},
+			{"16", "16,16,16", "43,42,41,33,32,31,29,27,27,27", "27", "6"},
+			{"16", "33,33,33,13,13,13", "43,42,41,29,27,27,27", "27", "0"},
+			{"16", "33,33,33,16,16,16", "43,42,41,29,27,27,27", "27", "6"},
+			{"16", "33,33,33,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
+			{"16", "3,3,3,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
+	};
+	
 	private static final String[][] TEST_HU_DATA = {
 		/**{"god", "matchDatas", "datas", "latest", "expected"}**/
 		{"21", "", "4,4,3,3,3,3,2,2,2,2,1,1,1", "1", "true"},
@@ -41,16 +54,19 @@ public class MahjGroupDataTestCase extends TestCase {
 	
 	private MahjGroupData mGroupData;
 	
-	public void testMatchType() {
-		mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(TEST_DATA[0]));
-		mGroupData.updateMatchType(new MahjData(12));
-		assertEquals(110, mGroupData.getMatchType());
-	}
-	
-	public void test_MatchType_feng() {
-		mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(TEST_DATA[0]));
-		mGroupData.updateMatchType(new MahjData(43));
-		assertEquals(10, mGroupData.getMatchType());
+	public void test_MatchType() {
+		for (int i = 0; i < TEST_MATCH_DATA.length; i++) {
+			int godIndex = Integer.valueOf(TEST_MATCH_DATA[i][0]);
+			String matchDatas = TEST_MATCH_DATA[i][1];
+			String datas = TEST_MATCH_DATA[i][2];
+			MahjData outData = new MahjData(Integer.valueOf(TEST_MATCH_DATA[i][3]));
+			int expected = Integer.valueOf(TEST_MATCH_DATA[i][4]);
+			mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(datas));
+			mGroupData.updateGodData(godIndex);
+			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
+			int matchType = mGroupData.updateMatchType(outData);
+			assertEquals(expected, matchType);
+		}
 	}
 	
 	public void test_OutData() {
