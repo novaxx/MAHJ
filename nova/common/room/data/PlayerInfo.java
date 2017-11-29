@@ -8,7 +8,7 @@ public class PlayerInfo {
 	private String head;
 	private byte[] headdatas;
 	/**
-	 *  0:boy, 1:girl
+	 *  0:girl, 1:boy
 	 */
 	private int sex;
 	private int vip;

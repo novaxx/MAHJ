@@ -7,7 +7,7 @@ public class MahjHandlerUtil {
 
 	private static final boolean DEBUG = false;
 
-	public static boolean isHuEnable(final ArrayList<Integer> infos, final int godCount) {
+	public static boolean isHuEnable(final ArrayList<Integer> infos, final int godIndex, final int godCount) {
 		int tmpGodCount = godCount;
 		ArrayList<Integer> tmpInfos = new ArrayList<Integer>();
 		tmpInfos.addAll(infos);
@@ -20,7 +20,7 @@ public class MahjHandlerUtil {
 				if (tmpGodCount > 0) {
 					tmpGodCount -= 1;
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -35,7 +35,7 @@ public class MahjHandlerUtil {
 						&& (i == tmpInfos.size() - 2 || tmpInfos.get(i) != tmpInfos.get(i + 2))) {
 					tmpInfos.remove(i + 1);
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -49,7 +49,7 @@ public class MahjHandlerUtil {
 				if (tmpGodCount > 0 && tmpInfos.get(i) != tmpInfos.get(i + 1)) {
 					tmpGodCount -= 1;
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -65,13 +65,13 @@ public class MahjHandlerUtil {
 		return false;
 	}
 
-	public static int getNeedGodCount(final ArrayList<Integer> infos) {
+	public static int getNeedGodCount(int godIndex, final ArrayList<Integer> infos) {
 		if (infos == null || infos.size() <= 0) {
 			return 0;
 		}
 
 		if (MahjUtil.getMahjColr(infos.get(0)) > 2) {
-			return getNeedGodCountByFeng(infos);
+			return getNeedGodCountByFeng(godIndex, infos);
 		}
 
 		return getNeedGodCountByCommon(infos);
@@ -170,7 +170,7 @@ public class MahjHandlerUtil {
 		return needGodCount;
 	}
 
-	private static int getNeedGodCountByFeng(final ArrayList<Integer> infos) {
+	private static int getNeedGodCountByFeng(int godIndex, final ArrayList<Integer> infos) {
 		int needGodCount = 0;
 		int infoSize = infos.size();
 		/** LOG--DEBUG--BEGIN-- **/
@@ -187,6 +187,12 @@ public class MahjHandlerUtil {
 			infos.removeAll(infos);
 		} else if (infoSize == 2) {
 			if (infos.get(0) == infos.get(1)) {
+				needGodCount += 1;
+			} else if (MahjUtil.getMahjColr(infos.get(0)) == MahjUtil.getMahjColr(godIndex)
+					&& infos.get(0) != godIndex && infos.get(1) != godIndex) {
+				/**
+				 * 赖子刚好可以跟麻将配成三个不同的，比如 GOD:西 infos:东,南
+				 */
 				needGodCount += 1;
 			} else {
 				needGodCount += 4;
@@ -217,7 +223,7 @@ public class MahjHandlerUtil {
 						int index = continuedLists.get(i);
 						infos.remove(index);
 					}
-					needGodCount += getNeedGodCountByFeng(infos);
+					needGodCount += getNeedGodCountByFeng(godIndex, infos);
 				}
 			}
 
@@ -230,7 +236,7 @@ public class MahjHandlerUtil {
 					int index = continuedList.get(i);
 					infos.remove(index);
 				}
-				needGodCount += getNeedGodCountByFeng(infos);
+				needGodCount += getNeedGodCountByFeng(godIndex, infos);
 			}
 
 			// 有三个相同的可以成为一组，四个相同的取三个
@@ -239,7 +245,7 @@ public class MahjHandlerUtil {
 					infos.remove(i + 2);
 					infos.remove(i + 1);
 					infos.remove(i);
-					needGodCount += getNeedGodCountByFeng(infos);
+					needGodCount += getNeedGodCountByFeng(godIndex, infos);
 					break;
 				}
 			}

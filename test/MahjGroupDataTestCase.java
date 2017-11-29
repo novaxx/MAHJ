@@ -38,6 +38,7 @@ public class MahjGroupDataTestCase extends TestCase {
 		{"21", "43,43,43,42,42,42,42", "33,32,31,21,16,15,14", "11", "true"},
 		{"21", "43,43,43,42,42,42,42", "33,32,31,16,15,14,13", "11", "false"},
 		{"15", "43,43,43", "34,32,31,26,25,24,23,22,21,15", "41", "true"},
+		{"33", "19,19,19", "43,42,41,33,32,31,18,17,16,15", "15", "true"},
 	};
 	
 	private static final String[][] TEST_TING_DATA = {
@@ -50,6 +51,14 @@ public class MahjGroupDataTestCase extends TestCase {
 			{"15", "43,43,43,27,27,27,27", "34,32,31,25,25,23,23", "23,25,15"},
 			{"15", "43,43,43,27,27,27,27", "34,32,31,25,24,15,15", "21,22,23,24,25,26,28,29,31,32,33,34,41,42,43,15"},
 			{"15", "43,43,43", "34,32,31,26,25,24,23,22,21,15", "21,22,23,24,25,26,27,28,29,31,32,33,34,41,42,43,15"},
+			/*实际场景*/
+			{"23", "14,14,14", "42,42,34,34,34,33,33,16,15,14", "33,42,23"},
+			{"33", "19,19,19", "43,42,41,33,32,31,18,17,16,15", "15,18,33,34"},
+	};
+	
+	private static final String[][] TEST_OPERATE_GANG_DATA = {
+			/**{"god", "matchDatas", "datas", "lastestdata", "expected"}**/
+			{"23", "", "42,42,34,34,34,33,33,16,15,14,14,14", "14", "9"},
 	};
 	
 	private MahjGroupData mGroupData;
@@ -111,5 +120,21 @@ public class MahjGroupDataTestCase extends TestCase {
 		}
 		long end_time = System.currentTimeMillis();
 		System.out.print("test_GetTingDatas--count:" + TEST_TING_DATA.length + ",total:" + (end_time - start_time) + ",each:" + (end_time - start_time)/TEST_TING_DATA.length + "\n");
+	}
+	
+	public void test_OperateGangData() {
+		for (int i = 0; i < TEST_OPERATE_GANG_DATA.length; i++) {
+			int godIndex = Integer.valueOf(TEST_OPERATE_GANG_DATA[i][0]);
+			String matchDatas = TEST_OPERATE_GANG_DATA[i][1];
+			String datas = TEST_OPERATE_GANG_DATA[i][2];
+			MahjData lastestData = new MahjData(Integer.valueOf(TEST_OPERATE_GANG_DATA[i][3]));
+			int expected = Integer.valueOf(TEST_OPERATE_GANG_DATA[i][4]);
+			mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(datas));
+			mGroupData.updateGodData(godIndex);
+			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
+			mGroupData.setLatestData(lastestData);
+			mGroupData.operateGangData(Integer.valueOf(TEST_OPERATE_GANG_DATA[i][3]));
+			assertEquals(expected, mGroupData.getDatas().size());
+		}
 	}
 }

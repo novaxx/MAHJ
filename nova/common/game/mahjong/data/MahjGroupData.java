@@ -281,7 +281,8 @@ public class MahjGroupData {
 					break;
 				}
 			}
-			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), godCount - needGodCount);
+			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), mGodIndex, godCount - needGodCount);
+			System.out.print("isHu " + isHu + "\n");
 			if (isHu) {
 				return true;
 			}
@@ -303,7 +304,7 @@ public class MahjGroupData {
 	}
 
 	private int getNeedGodCountForUnitData(MahjUnitData data) {
-		return MahjHandlerUtil.getNeedGodCount(data.getIndexs());
+		return MahjHandlerUtil.getNeedGodCount(mGodIndex, data.getIndexs());
 	}
 
 	/*
