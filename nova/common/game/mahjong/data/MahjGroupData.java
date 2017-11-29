@@ -282,7 +282,6 @@ public class MahjGroupData {
 				}
 			}
 			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), mGodIndex, godCount - needGodCount);
-			System.out.print("isHu " + isHu + "\n");
 			if (isHu) {
 				return true;
 			}
