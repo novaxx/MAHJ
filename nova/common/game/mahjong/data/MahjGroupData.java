@@ -516,4 +516,28 @@ public class MahjGroupData {
 		}
 		updateGroupData();
 	}
+	
+	public String toString() {
+		String matchDatas = "";
+		for (MahjData data : mMatchDatas) {
+			matchDatas = matchDatas + data.getIndex() + ",";
+		}
+		
+		String datas = "";
+		for (MahjData data : mDatas) {
+			datas = datas + data.getIndex() + ",";
+		}
+		
+		String outDatas = "";
+		for (MahjData data : mOutDatas) {
+			outDatas = outDatas + data.getIndex() + ",";
+		}
+		
+		int latestData = mLatestData != null ? mLatestData.getIndex() : -1;
+		
+		String result = "[out]" + mIsOuted + "[OT]" + mOperateType + "[LD]" + latestData + "[M]" + matchDatas
+				+ "[D]" + datas + "[O]" + outDatas;
+		
+		return result;
+	}
 }

@@ -1,6 +1,8 @@
 package nova.common.game.mahjong;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import nova.common.GameCommand;
 import nova.common.GameManager;
@@ -8,6 +10,7 @@ import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
 import nova.common.game.mahjong.data.MahjResponeData;
+import nova.common.game.mahjong.handler.FileLogRecorderManager;
 import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
@@ -23,6 +26,12 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	private MahjGameHandler mHandler;
 	private GameLogger mLogger = GameLogger.getInstance();
 	private MahjGameData mGameData;
+	
+	// 用于测试打印LOG
+	public static boolean debug = false;
+	private static final String DEBUG_TAG = "MJ_MSG";
+	// 用于保存游戏信息到文件
+	private String mStartTime;
 
 	@Override
 	public void onStageEnd(int stage) {
@@ -30,10 +39,22 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		case MahjGameStage.GET_MAHJ_GOD:
 			mMahjManager.updateGodData();
 			mGameData.setGod(mMahjManager.getGodData());
+			if (debug) {
+				mLogger.i(DEBUG_TAG, "get god data : " + mGameData.getGod());
+			}
+			//写信息到文件
+			printMessageToFile("get god data : " + mGameData.getGod());
 			break;
 
 		case MahjGameStage.GET_MAHJ_WAIT:
 			getLatestData();
+			if (debug) {
+				mLogger.i(DEBUG_TAG, "player " + mGameData.getCurrent() + 
+						" get latest data : " + mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).getLatestData().getIndex());
+			}
+		    // 写信息到文件
+			printMessageToFile("player " + mGameData.getCurrent() + 
+					" get latest data : " + mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).getLatestData().getIndex());
 			break;
 
 		case MahjGameStage.OUT_MAHJ_WAIT:
@@ -116,6 +137,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	public void startGame() {
 		super.startGame();
 		mLogger.d("zhangxx", "startGame");
+		mStartTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 		initGameData();
 		mStage.start();
 	}
@@ -143,6 +165,13 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	@Override
 	public void activeOutData(int playerId, int dataIndex) {
 		mLogger.d("zhangxx", "activeOutData, current : " + mGameData.getCurrent() + ", playerId : " + playerId + ", dataIndex : " + dataIndex);
+		
+		if (debug) {
+			mLogger.i(DEBUG_TAG, "player : " + playerId + " active out data : " + dataIndex);
+		}
+		// 写信息到文件
+		printMessageToFile("player : " + playerId + " active out data : " + dataIndex);
+		
 		if (mGameData.getCurrent() != playerId) {
 			return;
 		}
@@ -159,6 +188,13 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	@Override
 	public void activeOperateData(int playerId, int operateType) {
 		mLogger.d("zhangxx", "activeOperateData, current : " + mGameData.getCurrent() + ", playerId : " + playerId + ", operateType : " + operateType);
+		
+		if (debug) {
+			mLogger.i(DEBUG_TAG, "player : " + playerId + " active operated " + operateType);
+		}
+		// 写信息到文件
+		printMessageToFile("player : " + playerId + " active operated " + operateType);
+		
 		if (operateType != MahjConstant.MAHJ_MATCH_PENG && operateType != MahjConstant.MAHJ_MATCH_GANG 
 				&& operateType != MahjConstant.MAHJ_MATCH_CHI && operateType != MahjConstant.MAHJ_MATCH_TING
 				&& operateType != MahjConstant.MAHJ_MATCH_HU && operateType != MahjConstant.MAHJ_MATCH_GUO) {
@@ -229,6 +265,13 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 	private void updateGameInfoForHandler() {
 		if (mHandler != null) {
+			// 用于测试打印LOG
+			printLogForDebug();
+			// 用于测试打印LOG
+			
+			// 写信息到文件
+			updateGameInfoToFile();
+			
 			mHandler.onGameInfoChange(mRoomId, new MahjResponeData(mGameData, mMahjManager.getPlayerDatas()));
 		}
 	}
@@ -242,6 +285,12 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		if (mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).isHuEnable()) {
 			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_HU);
 			mGameData.setWinner(mGameData.getCurrent());
+			
+			if (debug) {
+				mLogger.i(DEBUG_TAG, "player : " + mGameData.getCurrent() + " HU !!");
+			}
+			// 写信息到文件
+			printMessageToFile("player : " + mGameData.getCurrent() + " HU !!");
 			return;
 		}
 		
@@ -250,11 +299,23 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		if (gangList != null && gangList.size() > 0) {
 			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).operateGangData(gangList.get(0));
 			mMahjManager.getPlayerDatas().get(mGameData.getCurrent()).setOperateType(MahjConstant.MAHJ_MATCH_GANG);
+			
+			if (debug) {
+				mLogger.i(DEBUG_TAG, "player : " + mGameData.getCurrent() + " GANG !!");
+			}
+			// 写信息到文件
+			printMessageToFile("player : " + mGameData.getCurrent() + " GANG !!");
 			return;
 		}
 		
 		MahjData outData = mMahjManager.getAutoOutData(mGameData.getCurrent());
 		updateOutData(mGameData.getCurrent(), outData);
+		
+		if (debug) {
+			mLogger.i(DEBUG_TAG, "player : " + mGameData.getCurrent() + " out data : " + outData.getIndex());
+		}
+		// 写信息到文件
+		printMessageToFile("player : " + mGameData.getCurrent() + " out data : " + outData.getIndex());
 	}
 
 	private void updateOutData(int playerId, MahjData outData) {
@@ -273,6 +334,12 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		int playerId = mMahjManager.getFirstMatchPlayer(mGameData.getCurrent());
 		int matchType = mMahjManager.getFirstMatchType(playerId);
 		updateMatchData(playerId, matchType);
+		
+		if (debug) {
+			mLogger.i(DEBUG_TAG, "player : " + mGameData.getCurrent() + " matched " + matchType);
+		}
+		// 写信息到文件
+		printMessageToFile("player : " + mGameData.getCurrent() + " matched " + matchType);
 	}
 
 	private void updateMatchData(int playerId, int matchType) {
@@ -280,5 +347,39 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		mGameData.setCurrent(playerId);
 		// 清空出牌的玩家
 		mGameData.clearLastout();
+	}
+	
+	private void printLogForDebug() {
+		if (debug) {
+			mLogger.i(DEBUG_TAG, "->->->->->->->->->->->->->->->->->->->->->->");
+			String remainData = "[余]";
+			for (MahjData data : mGameData.getDatas()) {
+				remainData = remainData + data.getIndex() + ",";
+			}
+			mLogger.i(DEBUG_TAG, remainData);
+			mLogger.i(DEBUG_TAG, mGameData.toString());
+			for (int i = 0; i < 4; i++) {
+				mLogger.i(DEBUG_TAG, "P" + (i + 1) + ":" + mMahjManager.getPlayerDatas().get(i).toString());
+			}
+			mLogger.i(DEBUG_TAG, "<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-<-");
+		}
+	}
+	
+	private void updateGameInfoToFile() {
+		String message = "->->->->\n";
+		String remainData = "[余]";
+		for (MahjData data : mGameData.getDatas()) {
+			remainData = remainData + data.getIndex() + ",";
+		}
+		message = message + remainData + "\n" + mGameData.toString() + "\n";
+		for (int i = 0; i < 4; i++) {
+			message = message + "P" + (i + 1) + ":" + mMahjManager.getPlayerDatas().get(i).toString() + "\n";
+		}
+		message = message + "<-<-<-<-\n";
+		printMessageToFile(message);
+	}
+	
+	private void printMessageToFile(String message) {
+		FileLogRecorderManager.getInstance().addMessage(mRoomId, mStartTime, message);
 	}
 }

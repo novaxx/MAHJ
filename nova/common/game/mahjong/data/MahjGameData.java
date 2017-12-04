@@ -78,4 +78,10 @@ public class MahjGameData {
 	public ArrayList<MahjData> getDatas() {
 		return this.datas;
 	}
+	
+	public String toString() {
+		String result = "[余]" + datas.size() + "[BA]" + banker + "[WI]" + 
+		winner + "[GO]" + god + "[CU]" + current + "[LO]" + lastout;
+		return result;
+	}
 }
