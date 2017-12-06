@@ -1,12 +1,12 @@
 package nova.common.game.mahjong.handler;
 
-public class MessageRequest {
+public class RecordRequest {
 
 	private int mRoomId;
 	private String mBody;
 	private String mTime;
 	
-	public MessageRequest(int roomId, String time, String body) {
+	public RecordRequest(int roomId, String time, String body) {
 		mRoomId = roomId;
 		mBody = body;
 		mTime = time;

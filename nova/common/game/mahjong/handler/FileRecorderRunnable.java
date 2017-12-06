@@ -5,16 +5,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 
-public class FileLogRecorderRunnable implements Runnable {
+public class FileRecorderRunnable implements Runnable {
 	private GameLogger mLogger = GameLogger.getInstance();
-	private static final String TAG = "FileLogRecorderRunnable";
-	private final Map<Integer, MessageQueue> mSessionMsgQ;
+	private static final String TAG = "FileRecorderRunnable";
+	private final Map<Integer, RecordQueue> mSessionMsgQ;
 	private Executor messageExecutor;
 	private boolean mIsRunning;
 	private long mSleepTime;
 
-	public FileLogRecorderRunnable() {
-		this.mSessionMsgQ = new ConcurrentHashMap<Integer, MessageQueue>();
+	public FileRecorderRunnable() {
+		this.mSessionMsgQ = new ConcurrentHashMap<Integer, RecordQueue>();
         this.messageExecutor = new Executor() {
 			
 			@Override
@@ -34,25 +34,25 @@ public class FileLogRecorderRunnable implements Runnable {
 		this.mSleepTime = sleepTime;
 	}
 
-	public void addMessageQueue(Integer roomId, MessageQueue messageQueue) {
+	public void addMessageQueue(Integer roomId, RecordQueue messageQueue) {
 		this.mSessionMsgQ.put(roomId, messageQueue);
 	}
 
 	public void removeMessageQueue(Integer roomId) {
-		MessageQueue queue = (MessageQueue) this.mSessionMsgQ.remove(roomId);
+		RecordQueue queue = (RecordQueue) this.mSessionMsgQ.remove(roomId);
 		if (queue != null)
 			queue.clear();
 	}
 
 	public void addMessage(Integer roomId, String time, String message) {
 		try {
-			MessageQueue messageQueue = (MessageQueue) this.mSessionMsgQ.get(roomId);
+			RecordQueue messageQueue = (RecordQueue) this.mSessionMsgQ.get(roomId);
 			if (messageQueue == null) {
-				messageQueue = new MessageQueue(new ConcurrentLinkedQueue<MessageRequest>());
+				messageQueue = new RecordQueue(new ConcurrentLinkedQueue<RecordRequest>());
 				this.mSessionMsgQ.put(roomId, messageQueue);
 			}
 			
-			messageQueue.add(new MessageRequest(roomId, time, message));
+			messageQueue.add(new RecordRequest(roomId, time, message));
 		} catch (Exception e) {
 			mLogger.e(TAG, e.toString());
 		}
@@ -61,7 +61,7 @@ public class FileLogRecorderRunnable implements Runnable {
 	public void run() {
 		while (this.mIsRunning) {
 			try {
-				for (MessageQueue messageQueue : mSessionMsgQ.values()) {
+				for (RecordQueue messageQueue : mSessionMsgQ.values()) {
 					if ((messageQueue != null) && (messageQueue.size() > 0) && (!messageQueue.isRunning())) {
 						MessageWorker messageWorker = new MessageWorker(messageQueue);
 						
@@ -83,18 +83,18 @@ public class FileLogRecorderRunnable implements Runnable {
 		this.mIsRunning = false;
 	}
 
-	public MessageQueue getUserMessageQueue(Integer roomId) {
-		return (MessageQueue) this.mSessionMsgQ.get(roomId);
+	public RecordQueue getUserMessageQueue(Integer roomId) {
+		return (RecordQueue) this.mSessionMsgQ.get(roomId);
 	}
 
 	private final class MessageWorker implements Runnable {
-		private final MessageQueue messageQueue;
-		private MessageRequest message;
+		private final RecordQueue messageQueue;
+		private RecordRequest message;
 
-		private MessageWorker(MessageQueue messageQueue) {
+		private MessageWorker(RecordQueue messageQueue) {
 			messageQueue.setRunning(true);
 			this.messageQueue = messageQueue;
-			this.message = ((MessageRequest) messageQueue.getRequestQueue().poll());
+			this.message = ((RecordRequest) messageQueue.getRequestQueue().poll());
 		}
 
 		public void run() {

@@ -7,20 +7,20 @@ import java.io.PrintStream;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class MessageQueue {
-	private Queue<MessageRequest> mMessageQueue;
+public class RecordQueue {
+	private Queue<RecordRequest> mMessageQueue;
 	private boolean mIsRunning = false;
 	private PrintStream mPrintStream;
 
-	public MessageQueue(ConcurrentLinkedQueue<MessageRequest> concurrentLinkedQueue) {
+	public RecordQueue(ConcurrentLinkedQueue<RecordRequest> concurrentLinkedQueue) {
 		this.mMessageQueue = concurrentLinkedQueue;
 	}
 
-	public Queue<MessageRequest> getRequestQueue() {
+	public Queue<RecordRequest> getRequestQueue() {
 		return this.mMessageQueue;
 	}
 
-	public void setRequestQueue(Queue<MessageRequest> requestQueue) {
+	public void setRequestQueue(Queue<RecordRequest> requestQueue) {
 		this.mMessageQueue = requestQueue;
 	}
 
@@ -33,10 +33,10 @@ public class MessageQueue {
 		return this.mMessageQueue != null ? this.mMessageQueue.size() : 0;
 	}
 
-	public boolean add(MessageRequest message) {
+	public boolean add(RecordRequest message) {
 		if (mPrintStream == null) {
 			try {
-				mPrintStream = new PrintStream(new FileOutputStream(new File(FileLogRecorderManager.getInstance().getFilePath()
+				mPrintStream = new PrintStream(new FileOutputStream(new File(FileRecorderManager.getInstance().getFilePath()
 						+ message.getRoom() + "_" + message.getTime() + ".txt")));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();

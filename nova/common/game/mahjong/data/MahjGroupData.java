@@ -535,8 +535,8 @@ public class MahjGroupData {
 		
 		int latestData = mLatestData != null ? mLatestData.getIndex() : -1;
 		
-		String result = "[out]" + mIsOuted + "[OT]" + mOperateType + "[LD]" + latestData + "[M]" + matchDatas
-				+ "[D]" + datas + "[O]" + outDatas;
+		String result = "[OUT]" + mIsOuted + ";[OT]" + mOperateType + ";[LD]" + latestData + ";[MD]" + matchDatas
+				+ ";[DD]" + datas + ";[OD]" + outDatas;
 		
 		return result;
 	}

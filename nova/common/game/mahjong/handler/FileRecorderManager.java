@@ -1,17 +1,17 @@
 package nova.common.game.mahjong.handler;
 
-public class FileLogRecorderManager {
-	private static FileLogRecorderManager mInstance;
-	private FileLogRecorderRunnable mRunnable;
+public class FileRecorderManager {
+	private static FileRecorderManager mInstance;
+	private FileRecorderRunnable mRunnable;
 	private String mFilePath;
 	
-	private FileLogRecorderManager() {
-		mRunnable = new FileLogRecorderRunnable();
+	private FileRecorderManager() {
+		mRunnable = new FileRecorderRunnable();
 	}
 	
-	public static FileLogRecorderManager getInstance() {
+	public static FileRecorderManager getInstance() {
 		if (mInstance == null) {
-			mInstance = new FileLogRecorderManager();
+			mInstance = new FileRecorderManager();
 		}
 		
 		return mInstance;
@@ -31,7 +31,7 @@ public class FileLogRecorderManager {
 	
 	public void addMessage(int roomId, String time, String message) {
 		if (mFilePath == null || mFilePath.isEmpty()) {
-			GameLogger.getInstance().e("FileLogRecorderManager", "file path is empty !!");
+			GameLogger.getInstance().e("FileRecorderManager", "file path is empty !!");
 			return;
 		}
 		

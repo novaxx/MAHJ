@@ -80,8 +80,8 @@ public class MahjGameData {
 	}
 	
 	public String toString() {
-		String result = "[余]" + datas.size() + "[BA]" + banker + "[WI]" + 
-		winner + "[GO]" + god + "[CU]" + current + "[LO]" + lastout;
+		String result = "[RS]" + datas.size() + ";[BA]" + banker + ";[WI]" + 
+		winner + ";[GO]" + god + ";[CU]" + current + ";[LO]" + lastout;
 		return result;
 	}
 }

@@ -10,7 +10,7 @@ import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
 import nova.common.game.mahjong.data.MahjResponeData;
-import nova.common.game.mahjong.handler.FileLogRecorderManager;
+import nova.common.game.mahjong.handler.FileRecorderManager;
 import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
@@ -367,19 +367,19 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	
 	private void updateGameInfoToFile() {
 		String message = "->->->->\n";
-		String remainData = "[余]";
+		String remainData = "[RD]";
 		for (MahjData data : mGameData.getDatas()) {
 			remainData = remainData + data.getIndex() + ",";
 		}
 		message = message + remainData + "\n" + mGameData.toString() + "\n";
 		for (int i = 0; i < 4; i++) {
-			message = message + "P" + (i + 1) + ":" + mMahjManager.getPlayerDatas().get(i).toString() + "\n";
+			message = message + "P" + i + ":" + mMahjManager.getPlayerDatas().get(i).toString() + "\n";
 		}
 		message = message + "<-<-<-<-\n";
 		printMessageToFile(message);
 	}
 	
 	private void printMessageToFile(String message) {
-		FileLogRecorderManager.getInstance().addMessage(mRoomId, mStartTime, message);
+		FileRecorderManager.getInstance().addMessage(mRoomId, mStartTime, message);
 	}
 }
