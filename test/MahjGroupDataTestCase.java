@@ -27,19 +27,20 @@ public class MahjGroupDataTestCase extends TestCase {
 	};
 	
 	private static final String[][] TEST_HU_DATA = {
-		/**{"god", "matchDatas", "datas", "latest", "expected"}**/
-		{"21", "", "4,4,3,3,3,3,2,2,2,2,1,1,1", "1", "true"},
-		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "11", "true"},
-		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "12", "true"},
-		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "15", "true"},
-		{"21", "", "21,19,19,19,18,17,16,15,14,13,12,11,11", "11", "true"},
-		{"24", "", "43,42,41,33,32,31,27,26,25,23,23,15,15", "23", "false"},
-		{"24", "", "43,42,41,33,31,27,26,25,24,23,23,23,15", "15", "false"},
-		{"21", "43,43,43,42,42,42,42", "33,32,31,21,16,15,14", "11", "true"},
-		{"21", "43,43,43,42,42,42,42", "33,32,31,16,15,14,13", "11", "false"},
-		{"15", "43,43,43", "34,32,31,26,25,24,23,22,21,15", "41", "true"},
+		/**{"god", "matchDatas", "datas", "latest", "operatetype", "expected"}**/
+		{"21", "", "4,4,3,3,3,3,2,2,2,2,1,1,1", "1", "8", "true"},
+		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "11", "8", "true"},
+		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "12", "8", "true"},
+		{"32", "", "19,19,19,18,17,16,15,14,13,12,11,11,11", "15", "8", "true"},
+		{"21", "", "21,19,19,19,18,17,16,15,14,13,12,11,11", "11", "8", "true"},
+		{"24", "", "43,42,41,33,32,31,27,26,25,23,23,15,15", "23", "8", "false"},
+		{"24", "", "43,42,41,33,31,27,26,25,24,23,23,23,15", "15", "8", "false"},
+		{"21", "43,43,43,42,42,42,42", "33,32,31,21,16,15,14", "11", "8", "true"},
+		{"21", "43,43,43,42,42,42,42", "33,32,31,16,15,14,13", "11", "8", "false"},
+		{"15", "43,43,43", "34,32,31,26,25,24,23,22,21,15", "41", "8", "true"},
 		/*实际场景*/
-		{"33", "19,19,19", "43,42,41,33,32,31,18,17,16,15", "15", "true"},
+		{"33", "19,19,19", "43,42,41,33,32,31,18,17,16,15", "15", "8", "true"},
+		{"19", "29,29,29", "42,42,28,27,26,25,24,23,23,19", "23", "0", "false"},
 	};
 	
 	private static final String[][] TEST_TING_DATA = {
@@ -55,11 +56,12 @@ public class MahjGroupDataTestCase extends TestCase {
 			/*实际场景*/
 			{"23", "14,14,14", "42,42,34,34,34,33,33,16,15,14", "33,42,23"},
 			{"33", "19,19,19", "43,42,41,33,32,31,18,17,16,15", "15,18,33,34"},
+			{"19", "29,29,29", "42,42,28,27,26,25,24,23,23,19", "21,22,23,24,25,26,29,42,19"},
 	};
 	
 	private static final String[][] TEST_OPERATE_GANG_DATA = {
 			/**{"god", "matchDatas", "datas", "lastestdata", "expected"}**/
-			{"23", "", "42,42,34,34,34,33,33,16,15,14,14,14", "14", "9"},
+			{"28", "", "42,42,34,34,34,33,33,16,15,14,14,14", "14", "9"},
 	};
 	
 	private MahjGroupData mGroupData;
@@ -92,12 +94,14 @@ public class MahjGroupDataTestCase extends TestCase {
 			String matchDatas = TEST_HU_DATA[i][1];
 			String datas = TEST_HU_DATA[i][2];
 			MahjData latestData = new MahjData(Integer.valueOf(TEST_HU_DATA[i][3]));
-			boolean expected = Boolean.valueOf(TEST_HU_DATA[i][4]);
+			int operateType = Integer.valueOf(TEST_HU_DATA[i][4]);
+			boolean expected = Boolean.valueOf(TEST_HU_DATA[i][5]);
 			mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(datas));
 			mGroupData.updateGodData(godIndex);
 			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
 			mGroupData.setLatestData(latestData);
-			mGroupData.setOperateType(MahjConstant.MAHJ_MATCH_TING);
+			mGroupData.setOperateType(operateType);
+			mGroupData.setOuted(true);
 			boolean isHu = mGroupData.isHuEnable();
 			assertEquals(expected, isHu);
 		}

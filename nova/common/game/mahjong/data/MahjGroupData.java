@@ -236,7 +236,6 @@ public class MahjGroupData {
 				tingDatas.add(data);
 			}
 		}
-		
 		return tingDatas;
 	}
 	
@@ -253,7 +252,7 @@ public class MahjGroupData {
 		}
 
 		// 不听牌不能胡牌，天胡为特殊情况
-		if (mOperateType != MahjConstant.MAHJ_MATCH_TING && mIsOuted) {
+		if ((mOperateType & MahjConstant.MAHJ_MATCH_TING) != MahjConstant.MAHJ_MATCH_TING && mIsOuted) {
 			return false;
 		}
 		
@@ -408,11 +407,15 @@ public class MahjGroupData {
 			}
 			message = message + i + "-{" + mUnitDatas.get(i).toString() + "}";
 		}
-		// android.util.Log.e("zhangxx", message);
+		// GameLogger.getInstance().e("zhangxx", message);
 		/*----添加LOG打印----end----*/
 	}
 
 	private void addDataToUnit(MahjData data) {
+		if (data == null || data.getIndex() <= 0) {
+			return;
+		}
+		
 		int groupId = getGroupIdByData(data);
 		if (mUnitDatas.get(groupId) == null) {
 			mUnitDatas.put(groupId, new MahjUnitData());

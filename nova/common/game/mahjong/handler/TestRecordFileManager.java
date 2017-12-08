@@ -118,7 +118,7 @@ public class TestRecordFileManager {
 			} else {
 				// P0:[OUT]true;[OT]0;[LD]-1;[MD];[DD]43,42,33,19,15,14,14,13,6,4,2,2,1,;[OD]29,28,27,24,
 				int index = Integer.valueOf(record.substring(1, 2));
-				groupDatas.put(index, getGroupDataFromRecord(index, record));
+				groupDatas.put(index, getGroupDataFromRecord(index, gameData.getGod(), record));
 			}
 		}
 		return new MahjResponeData(gameData, groupDatas);
@@ -171,7 +171,7 @@ public class TestRecordFileManager {
 	 * P0:[OUT]true;[OT]0;[LD]-1;[MD];[DD]43,42,33,19,15,14,14,13,6,4,2,2,1,;[OD
 	 * ]29,28,27,24,
 	 */
-	private MahjGroupData getGroupDataFromRecord(int index, String record) {
+	private MahjGroupData getGroupDataFromRecord(int index, int god, String record) {
 		MahjGroupData groupData = new MahjGroupData(index, new ArrayList<MahjData>());
 		String[] ss = record.substring(record.indexOf(":") + 1).split(";");
 		for (String s : ss) {
@@ -193,6 +193,10 @@ public class TestRecordFileManager {
 			}
 		}
 
+		if (god > 0) {
+			groupData.updateGodData(god);
+		}
+		
 		return groupData;
 	}
 

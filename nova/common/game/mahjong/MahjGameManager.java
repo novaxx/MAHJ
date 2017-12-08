@@ -352,7 +352,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	private void printLogForDebug() {
 		if (debug) {
 			mLogger.i(DEBUG_TAG, "->->->->->->->->->->->->->->->->->->->->->->");
-			String remainData = "[余]";
+			String remainData = "[RD]";
 			for (MahjData data : mGameData.getDatas()) {
 				remainData = remainData + data.getIndex() + ",";
 			}
