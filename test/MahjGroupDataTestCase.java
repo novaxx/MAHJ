@@ -62,6 +62,8 @@ public class MahjGroupDataTestCase extends TestCase {
 	private static final String[][] TEST_OPERATE_GANG_DATA = {
 			/**{"god", "matchDatas", "datas", "lastestdata", "expected"}**/
 			{"28", "", "42,42,34,34,34,33,33,16,15,14,14,14", "14", "9"},
+			/*实际场景*/
+			{"6", "", "43,42,41,33,32,17,16,15,11,11,11,6,6", "11", "10"},
 	};
 	
 	private MahjGroupData mGroupData;
@@ -139,7 +141,8 @@ public class MahjGroupDataTestCase extends TestCase {
 			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
 			mGroupData.setLatestData(lastestData);
 			mGroupData.operateGangData(Integer.valueOf(TEST_OPERATE_GANG_DATA[i][3]));
-			assertEquals(expected, mGroupData.getDatas().size());
+			int latestSize = mGroupData.getLatestData() != null ? 1 : 0;
+			assertEquals(expected, mGroupData.getDatas().size() + latestSize);
 		}
 	}
 }

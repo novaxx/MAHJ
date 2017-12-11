@@ -509,6 +509,13 @@ public class MahjGroupData {
 		}
 
 		for (int i = 0; i < mahjCount; i++) {
+			if (mLatestData != null && mLatestData.getIndex() == index) {
+				// 新拿的牌为杆/碰的牌，先把这张牌杆掉
+				mMatchDatas.add(mLatestData);
+				mLatestData = null;
+				continue;
+			}
+			
 			for (int j = 0; j < mDatas.size(); j++) {
 				if (mDatas.get(j).getIndex() == index) {
 					mMatchDatas.add(mDatas.get(j));
