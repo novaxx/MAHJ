@@ -125,6 +125,20 @@ public class RoomInfo {
 	public boolean isNormalPlayer(int id) {
 		return mPlayers.get(id).isNormalPlayer();
 	}
+	
+	public boolean hasNormalPlayer() {
+		for (int i = 0; i < PLAYER_MAX; i++) {
+			if (mPlayers.get(i) == null) {
+				continue;
+			}
+
+			if (isNormalPlayer(i)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	public void fillAutoPlayer() {
 		for (int i = 0; i < PLAYER_MAX; i++) {

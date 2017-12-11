@@ -44,7 +44,7 @@ public class RoomController {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public void updateRoomManagerForPlayerOffline(int playerId) {
+	public int updateRoomManagerForPlayerOffline(int playerId) {
 		Set set = mRoomManagers.entrySet();
 		Iterator it=set.iterator();
 		while (it.hasNext()) {
@@ -52,7 +52,7 @@ public class RoomController {
 			RoomManager roomManager = (RoomManager)entry.getValue();
 			if (roomManager.getRoomInfo().containPlayer(playerId)) {
 				int roomId = (Integer)(entry.getKey());
-				if (roomManager.getRoomInfo().isRunning()) {
+				if (roomManager.getRoomInfo().isRunning() && roomManager.getGameManager().isGameRunning()) {
 					roomManager.getRoomInfo().updateTypeForPlayer(playerId, true);
 					GameLogger.getInstance().i(TAG, "updateRoomManagerForPlayerOffline set palyer auto success, playerId : " + roomId + ", playerId : " + playerId);
 				} else {
@@ -64,9 +64,11 @@ public class RoomController {
 						GameLogger.getInstance().e(TAG, "updateRoomManagerForPlayerOffline error : index " + index + " is anomaly value !!!");
 					}
 				}
-				return;
+				return roomId;
 			}
 		}
+		
+		return -1;
 	}
 
 	public int searchSuitableRoom(PlayerInfo player) {

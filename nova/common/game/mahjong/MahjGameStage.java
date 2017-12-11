@@ -71,8 +71,10 @@ public class MahjGameStage {
 	}
 
 	public void stop() {
-		mTimer.stopTimer();
-		mTimer = null;
+		if (mTimer != null) {
+			mTimer.stopTimer();
+			mTimer = null;
+		}
 		mGameStage = 0;
 		cleanStageTime();
 	}
