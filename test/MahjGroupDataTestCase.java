@@ -26,6 +26,12 @@ public class MahjGroupDataTestCase extends TestCase {
 			{"16", "3,3,3,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
 	};
 	
+	private static final String[][] TEST_MATCH_LATEST_DATA = {
+			/**{"god", "matchDatas", "datas", "latestdata", "expected"}**/
+			{"16", "", "43,42,41,33,32,31,29,28,27,27,27,25,24", "27", "4"},
+			{"16", "27,27,27", "43,42,41,33,32,31,29,28,25,24", "27", "4"},
+	};
+	
 	private static final String[][] TEST_HU_DATA = {
 		/**{"god", "matchDatas", "datas", "latest", "operatetype", "expected"}**/
 		{"21", "", "4,4,3,3,3,3,2,2,2,2,1,1,1", "1", "8", "true"},
@@ -64,11 +70,12 @@ public class MahjGroupDataTestCase extends TestCase {
 			{"28", "", "42,42,34,34,34,33,33,16,15,14,14,14", "14", "9"},
 			/*实际场景*/
 			{"6", "", "43,42,41,33,32,17,16,15,11,11,11,6,6", "11", "10"},
+			{"6", "11,11,11", "43,42,41,33,32,17,16,15,6,6", "11", "10"},
 	};
 	
 	private MahjGroupData mGroupData;
 	
-	public void test_MatchType() {
+	public void test_updateMatchType() {
 		for (int i = 0; i < TEST_MATCH_DATA.length; i++) {
 			int godIndex = Integer.valueOf(TEST_MATCH_DATA[i][0]);
 			String matchDatas = TEST_MATCH_DATA[i][1];
@@ -79,6 +86,22 @@ public class MahjGroupDataTestCase extends TestCase {
 			mGroupData.updateGodData(godIndex);
 			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
 			int matchType = mGroupData.updateMatchType(outData);
+			assertEquals(expected, matchType);
+		}
+	}
+	
+	public void test_updateMatchTypeForGetMahj() {
+		for (int i = 0; i < TEST_MATCH_LATEST_DATA.length; i++) {
+			int godIndex = Integer.valueOf(TEST_MATCH_LATEST_DATA[i][0]);
+			String matchDatas = TEST_MATCH_LATEST_DATA[i][1];
+			String datas = TEST_MATCH_LATEST_DATA[i][2];
+			MahjData latestData = new MahjData(Integer.valueOf(TEST_MATCH_LATEST_DATA[i][3]));
+			int expected = Integer.valueOf(TEST_MATCH_LATEST_DATA[i][4]);
+			mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(datas));
+			mGroupData.updateGodData(godIndex);
+			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
+			mGroupData.setLatestData(latestData);
+			int matchType = mGroupData.updateMatchTypeForGetMahj();
 			assertEquals(expected, matchType);
 		}
 	}

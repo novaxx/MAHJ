@@ -140,6 +140,17 @@ public class MahjGroupData {
 			matchType = matchType | MahjConstant.MAHJ_MATCH_GANG;
 		}
 		
+		int dataSizeInMatchs = 0;
+		for (MahjData data : mMatchDatas) {
+			if (mLatestData.getIndex() == data.getIndex()) {
+				dataSizeInMatchs++;
+			}
+		}
+		
+		if (dataSizeInMatchs == 3) {
+			matchType = matchType | MahjConstant.MAHJ_MATCH_GANG;
+		}
+		
 		return matchType;
 	}
 
