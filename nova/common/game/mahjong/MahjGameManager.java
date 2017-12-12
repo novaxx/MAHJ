@@ -3,6 +3,7 @@ package nova.common.game.mahjong;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import nova.common.GameCommand;
 import nova.common.GameManager;
@@ -138,6 +139,9 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		super.startGame();
 		mLogger.d("zhangxx", "startGame");
 		mStartTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+		//写玩家信息到文件
+		printPlayerInfoToFile();
+		
 		initGameData();
 		mStage.start();
 	}
@@ -153,6 +157,8 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		super.stopGame();
 		mLogger.d("zhangxx", "stopGame");
 		mStage.stop();
+		// 写信息到文件
+		printMessageToFile("GAME OVER!!");
 	}
 	
 	@Override
@@ -160,6 +166,8 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		super.pauseGame();
 		mLogger.d("zhangxx", "pauseGame");
 		mStage.stop();
+		// 写信息到文件
+		printMessageToFile("GAME OVER!!");
 	}
 
 	@Override
@@ -381,5 +389,18 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	
 	private void printMessageToFile(String message) {
 		FileRecorderManager.getInstance().addMessage(mRoomId, mStartTime, message);
+	}
+	
+	private void printPlayerInfoToFile() {
+		HashMap<Integer, PlayerInfo> players = RoomController.getInstance(GameCommand.MAHJ_TYPE_GAME).getRoomManager(mRoomId)
+				.getRoomInfo().getPlayers();
+		String infos = "";
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i) == null) {
+				continue;
+			}
+			infos = infos + "P" + i + ":" + players.get(i).getId() + players.get(i).getName() + ",";
+		}
+		FileRecorderManager.getInstance().addMessage(mRoomId, mStartTime, infos);
 	}
 }

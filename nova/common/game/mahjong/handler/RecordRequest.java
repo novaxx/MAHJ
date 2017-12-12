@@ -23,4 +23,8 @@ public class RecordRequest {
 	public String getTime() {
 		return mTime;
 	}
+	
+	public String getRoomId_Time() {
+		return mRoomId + "_" + mTime;
+	}
 }
