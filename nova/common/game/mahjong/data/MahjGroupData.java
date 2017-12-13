@@ -374,9 +374,9 @@ public class MahjGroupData {
 		for (int i = 0; i < datas.size(); i++) {
 			// 从第i+1为开始循环数组
 			for (int j = i + 1; j < datas.size(); j++) {
-				// 如果前一位比后一位小，那么就将两个数字调换
-				// 这里是按降序排列
-				// 如果你想按升序排列只要改变符号即可
+				// 如果后一位比前一位小，那么就将两个数字调换
+				// 这里是按升序排列
+				// 如果你想按降序排列只要改变符号即可
 				if (compareCard(datas.get(i), datas.get(j))) {
 					MahjData tem = datas.get(i);
 					datas.set(i, datas.get(j));
@@ -387,7 +387,7 @@ public class MahjGroupData {
 	}
 
 	private boolean compareCard(MahjData data1, MahjData data2) {
-		return data2.getIndex() > data1.getIndex();
+		return data2.getIndex() < data1.getIndex();
 	}
 
 	private void initUnitDatas() {
