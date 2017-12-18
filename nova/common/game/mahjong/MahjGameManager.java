@@ -156,7 +156,9 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	public void stopGame() {
 		super.stopGame();
 		mLogger.d("zhangxx", "stopGame");
-		mStage.stop();
+		if (mStage != null) {
+			mStage.stop();
+		}
 		// 写信息到文件
 		printMessageToFile("GAME OVER!!");
 	}
@@ -165,7 +167,9 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 	public void pauseGame() {
 		super.pauseGame();
 		mLogger.d("zhangxx", "pauseGame");
-		mStage.stop();
+		if (mStage != null) {
+			mStage.stop();
+		}
 		// 写信息到文件
 		printMessageToFile("GAME OVER!!");
 	}

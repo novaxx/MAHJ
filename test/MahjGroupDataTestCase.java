@@ -14,16 +14,18 @@ public class MahjGroupDataTestCase extends TestCase {
 	};
 	
 	private static final String[][] TEST_MATCH_DATA = {
-			/**{"god", "matchDatas", "datas", "outdata", "expected"}**/
-			{"16", "", "43,42,41,33,32,31,29,28,27,27,27,25,24", "27", "6"},
-			{"16", "", "43,42,41,33,32,31,29,28,27,27,26,25,24", "27", "2"},
-			{"16", "43,43,43", "43,42,41,33,32,31,29,28,27,27", "27", "2"},
-			{"16", "14,14,14", "43,42,41,33,32,31,29,28,27,27", "27", "0"},
-			{"16", "16,16,16", "43,42,41,33,32,31,29,27,27,27", "27", "6"},
-			{"16", "33,33,33,13,13,13", "43,42,41,29,27,27,27", "27", "0"},
-			{"16", "33,33,33,16,16,16", "43,42,41,29,27,27,27", "27", "6"},
-			{"16", "33,33,33,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
-			{"16", "3,3,3,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
+			/**{"god", "operateType", "matchDatas", "datas", "outdata", "expected"}**/
+			{"16", "0", "", "43,42,41,33,32,31,29,28,27,27,27,25,24", "27", "6"},
+			{"16", "0", "", "43,42,41,33,32,31,29,28,27,27,26,25,24", "27", "2"},
+			{"16", "0", "43,43,43", "43,42,41,33,32,31,29,28,27,27", "27", "2"},
+			{"16", "0", "14,14,14", "43,42,41,33,32,31,29,28,27,27", "27", "0"},
+			{"16", "0", "16,16,16", "43,42,41,33,32,31,29,27,27,27", "27", "6"},
+			{"16", "0", "33,33,33,13,13,13", "43,42,41,29,27,27,27", "27", "0"},
+			{"16", "0", "33,33,33,16,16,16", "43,42,41,29,27,27,27", "27", "6"},
+			{"16", "0", "33,33,33,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
+			{"16", "0", "3,3,3,27,27,27,27", "43,43,42,41,26,26", "43", "2"},
+			{"16", "8", "3,3,3,27,27,27,27", "43,43,42,41,26,26", "43", "0"},
+			{"16", "8", "3,3,3,27,27,27,27", "43,43,43,41,26,26", "43", "4"},
 	};
 	
 	private static final String[][] TEST_MATCH_LATEST_DATA = {
@@ -71,6 +73,7 @@ public class MahjGroupDataTestCase extends TestCase {
 			/*实际场景*/
 			{"6", "", "43,42,41,33,32,17,16,15,11,11,11,6,6", "11", "10"},
 			{"6", "11,11,11", "43,42,41,33,32,17,16,15,6,6", "11", "10"},
+			{"26", "22,22,22,28,28,28,29,29,29", "25,26,31,32", "29", "4"},
 	};
 	
 	private MahjGroupData mGroupData;
@@ -78,12 +81,14 @@ public class MahjGroupDataTestCase extends TestCase {
 	public void test_updateMatchType() {
 		for (int i = 0; i < TEST_MATCH_DATA.length; i++) {
 			int godIndex = Integer.valueOf(TEST_MATCH_DATA[i][0]);
-			String matchDatas = TEST_MATCH_DATA[i][1];
-			String datas = TEST_MATCH_DATA[i][2];
-			MahjData outData = new MahjData(Integer.valueOf(TEST_MATCH_DATA[i][3]));
-			int expected = Integer.valueOf(TEST_MATCH_DATA[i][4]);
+			int operate = Integer.valueOf(TEST_MATCH_DATA[i][1]);
+			String matchDatas = TEST_MATCH_DATA[i][2];
+			String datas = TEST_MATCH_DATA[i][3];
+			MahjData outData = new MahjData(Integer.valueOf(TEST_MATCH_DATA[i][4]));
+			int expected = Integer.valueOf(TEST_MATCH_DATA[i][5]);
 			mGroupData = new MahjGroupData(0, TestUtil.getMahjDatas(datas));
 			mGroupData.updateGodData(godIndex);
+			mGroupData.setOperateType(operate);
 			mGroupData.setMatchDatas(TestUtil.getMahjDatas(matchDatas));
 			int matchType = mGroupData.updateMatchType(outData);
 			assertEquals(expected, matchType);

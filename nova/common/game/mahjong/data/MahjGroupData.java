@@ -326,7 +326,12 @@ public class MahjGroupData {
 		
 		int groupId = getGroupIdByData(data);
 		if (mUnitDatas.get(groupId) != null) {
-			return mUnitDatas.get(groupId).getMatchType(data);
+			int matchType = mUnitDatas.get(groupId).getMatchType(data);
+			if ((mOperateType & MahjConstant.MAHJ_MATCH_TING) == MahjConstant.MAHJ_MATCH_TING) {
+				// 听牌之后不能再吃/碰
+				matchType = matchType & (MahjConstant.MAHJ_MATCH_GANG + MahjConstant.MAHJ_MATCH_TING + MahjConstant.MAHJ_MATCH_HU);
+			}
+			return matchType;
 		}
 
 		return 0;
