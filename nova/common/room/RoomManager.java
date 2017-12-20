@@ -1,5 +1,6 @@
 package nova.common.room;
 
+import nova.common.GameHandler;
 import nova.common.GameManager;
 import nova.common.room.data.RoomInfo;
 import nova.common.room.handler.RoomHandler;
@@ -44,10 +45,10 @@ public class RoomManager {
 		}
 	};
 
-	public RoomManager(int roomId, int gameType) {
+	public RoomManager(int roomId, GameHandler handler, int gameType) {
 		mRoomId = roomId;
 		mRoomInfo = new RoomInfo();
-		mGameManager = GameManager.createManager(roomId, gameType);
+		mGameManager = GameManager.createManager(roomId, handler, gameType);
 	}
 
 	public void setTestGameDelay(int delay) {

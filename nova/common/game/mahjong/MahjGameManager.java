@@ -21,7 +21,6 @@ import nova.common.room.data.PlayerInfo;
 
 public class MahjGameManager extends GameManager implements StageCallBack, MahjGameDispatcher {
 
-	private int mRoomId;
 	private MahjGameStage mStage;
 	private MahjManager mMahjManager;
 	private MahjGameHandler mHandler;
@@ -127,7 +126,6 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 
 	public MahjGameManager(int roomId) {
 		super(roomId);
-		mRoomId = roomId;
 		/*mMahjManager = new MahjManager();
 		mGameData = new MahjGameData();
 		mStage = new MahjGameStage();
@@ -172,6 +170,11 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		}
 		// 写信息到文件
 		printMessageToFile("GAME OVER!!");
+	}
+	
+	@Override
+	protected int getWinner() {
+		return mGameData.getWinner();
 	}
 
 	@Override

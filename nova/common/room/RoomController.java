@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import nova.common.GameHandler;
 import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.room.data.PlayerInfo;
 import nova.common.room.data.RoomInfo;
@@ -22,6 +23,7 @@ public class RoomController {
 	private static HashMap<Integer, RoomController> mInstances = new HashMap<Integer, RoomController>();
 	private HashMap<Integer, RoomManager> mRoomManagers = new HashMap<Integer, RoomManager>();
 	private int mRoomtype;
+	private GameHandler mHandler;
 
 	private RoomController(int type) {
 		mRoomtype = type;
@@ -35,10 +37,14 @@ public class RoomController {
 			return mInstances.get(type);
 		}
 	}
+	
+	public void setGameHandler(GameHandler handler) {
+		mHandler = handler;
+	}
 
 	public RoomManager getRoomManager(int roomId) {
 		if (mRoomManagers.get(roomId) == null) {
-			mRoomManagers.put(roomId, new RoomManager(roomId, mRoomtype));
+			mRoomManagers.put(roomId, new RoomManager(roomId, mHandler, mRoomtype));
 		}
 		return mRoomManagers.get(roomId);
 	}
@@ -163,7 +169,7 @@ public class RoomController {
 		while (true) {
 			roomId = random.nextInt(TEAM_ROOM_MAX) % TEAM_ROOM_MAX + TEAM_ROOM_MAX;
 			if (mRoomManagers.get(roomId) == null) {
-				mRoomManagers.put(roomId, new RoomManager(roomId, mRoomtype));
+				mRoomManagers.put(roomId, new RoomManager(roomId, mHandler, mRoomtype));
 				break;
 			}
 		}

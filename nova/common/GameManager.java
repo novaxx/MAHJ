@@ -10,19 +10,32 @@ public class GameManager {
 	public static final int GAME_STATE_START = 2;
 	public static final int GAME_STATE_RESUME = 3;
 	private int mGameState;
+	protected int mRoomId;
+	private GameHandler mHandler;
 	
-	public static GameManager createManager(int roomId, int gameType) {
+	public static GameManager createManager(int roomId, GameHandler handler, int gameType) {
+		GameManager manager;
 		switch (gameType) {
 		case GameCommand.MAHJ_TYPE_GAME:
-			return new MahjGameManager(roomId);
-
+			manager = new MahjGameManager(roomId);
+			break;
+			
 		default:
-			return new GameManager(roomId);
+			manager = new GameManager(roomId);
+			break;
 		}
+		
+		manager.setGameHandler(handler);
+		
+		return manager;
 	}
 	
 	protected GameManager(int roomId) {
-		
+		mRoomId = roomId;
+	}
+	
+	public void setGameHandler(GameHandler handler) {
+		mHandler = handler;
 	}
 	
 	public boolean isGameRunning() {
@@ -30,6 +43,9 @@ public class GameManager {
 	}
 	
 	public void startGame() {
+		if (mHandler != null) {
+			mHandler.start();
+		}
 		mGameState = GAME_STATE_START;
 	}
 	
@@ -38,10 +54,20 @@ public class GameManager {
 	}
 	
 	public void stopGame() {
+		if (isGameRunning() && mHandler != null) {
+			mHandler.end(mRoomId, getWinner());
+		}
 		mGameState = GAME_STATE_INIT;
 	}
 	
 	public void pauseGame() {
+		if (isGameRunning() && mHandler != null) {
+			mHandler.end(mRoomId, getWinner());
+		}
 		mGameState = GAME_STATE_PAUSE;
+	}
+	
+	protected int getWinner() {
+		return -1;
 	}
 }

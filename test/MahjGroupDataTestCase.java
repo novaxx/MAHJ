@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGroupData;
-import nova.common.game.mahjong.util.MahjConstant;
 
 public class MahjGroupDataTestCase extends TestCase {
 

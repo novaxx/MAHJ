@@ -24,7 +24,8 @@ public class MahjGameCommand {
 	
 	// 游戏信息变化
 	public static final int RESPONE_GAME_INFO_UPDATE = 1250;
-	
+	// 玩家信息变化
+	public static final int RESPONE_PLAYER_INFO_UPDATE = 1260;
 	// 房间信息变化
 	public static final int RESPONE_ROOM_INFO_UPDATE = 1290;
 	// 房间状态变化
