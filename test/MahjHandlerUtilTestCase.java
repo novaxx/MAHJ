@@ -88,14 +88,14 @@ public class MahjHandlerUtilTestCase extends TestCase {
 	
 	public void test_getGodCount_Not_Jiang() {
 		for (int i = 0; i < TEST_NEEDGOD_DATA.length; i++) {
-			int needGodCount = MahjHandlerUtil.getNeedGodCount(Integer.valueOf(TEST_NEEDGOD_DATA[i][0]), TestUtil.getMahjIndexs(TEST_NEEDGOD_DATA[i][2]));
+			int needGodCount = MahjHandlerUtil.getNeedGodCount(Integer.valueOf(TEST_NEEDGOD_DATA[i][0]), TestUtil.getMahjIndexs(TEST_NEEDGOD_DATA[i][2]), null);
 			assertEquals((int) Integer.valueOf(TEST_NEEDGOD_DATA[i][1]), needGodCount);
 		}
 	}
 
 	public void test_getGodCount_Feng_Not_Jiang() {
 		for (int i = 0; i < TEST_NEEDGOD_FENG_DATA.length; i++) {
-			int needGodCount = MahjHandlerUtil.getNeedGodCount(Integer.valueOf(TEST_NEEDGOD_FENG_DATA[i][0]), TestUtil.getMahjIndexs(TEST_NEEDGOD_FENG_DATA[i][2]));
+			int needGodCount = MahjHandlerUtil.getNeedGodCount(Integer.valueOf(TEST_NEEDGOD_FENG_DATA[i][0]), TestUtil.getMahjIndexs(TEST_NEEDGOD_FENG_DATA[i][2]), null);
 			assertEquals((int) Integer.valueOf(TEST_NEEDGOD_FENG_DATA[i][1]), needGodCount);
 		}
 	}
@@ -105,7 +105,7 @@ public class MahjHandlerUtilTestCase extends TestCase {
 			String data = TEST_HUJIANG_DATA[i][2];
 			int godCount = Integer.valueOf(TEST_HUJIANG_DATA[i][1]);
 			boolean expected = Boolean.valueOf(TEST_HUJIANG_DATA[i][3]);
-			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), Integer.valueOf(TEST_HUJIANG_DATA[i][0]), godCount);
+			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), Integer.valueOf(TEST_HUJIANG_DATA[i][0]), godCount, null);
 			assertEquals(expected, isHu);
 		}
 	}
@@ -115,7 +115,7 @@ public class MahjHandlerUtilTestCase extends TestCase {
 			String data = TEST_HUJIANG_FENG_DATA[i][2];
 			int godCount = Integer.valueOf(TEST_HUJIANG_FENG_DATA[i][1]);
 			boolean expected = Boolean.valueOf(TEST_HUJIANG_FENG_DATA[i][3]);
-			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), Integer.valueOf(TEST_HUJIANG_FENG_DATA[i][0]), godCount);
+			boolean isHu = MahjHandlerUtil.isHuEnable(TestUtil.getMahjIndexs(data), Integer.valueOf(TEST_HUJIANG_FENG_DATA[i][0]), godCount, null);
 			assertEquals(expected, isHu);
 		}
 	}

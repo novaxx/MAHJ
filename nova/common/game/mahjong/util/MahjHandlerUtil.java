@@ -8,6 +8,10 @@ public class MahjHandlerUtil {
 	private static final boolean DEBUG = false;
 
 	public static boolean isHuEnable(final ArrayList<Integer> infos, final int godIndex, final int godCount) {
+		return isHuEnable(infos, godIndex, godCount, null);
+	}
+	
+	public static boolean isHuEnable(final ArrayList<Integer> infos, final int godIndex, final int godCount, ArrayList<String> orders) {
 		int tmpGodCount = godCount;
 		ArrayList<Integer> tmpInfos = new ArrayList<Integer>();
 		tmpInfos.addAll(infos);
@@ -19,8 +23,11 @@ public class MahjHandlerUtil {
 			if (tmpInfos.size() - 1 == i) {
 				if (tmpGodCount > 0) {
 					tmpGodCount -= 1;
+					if (orders != null) {
+						orders.add(tmpInfos.get(i) + ",G");
+					}
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos, orders);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -33,9 +40,12 @@ public class MahjHandlerUtil {
 			} else {
 				if (is2Combine(tmpInfos.get(i), tmpInfos.get(i + 1))
 						&& (i == tmpInfos.size() - 2 || tmpInfos.get(i) != tmpInfos.get(i + 2))) {
+					if (orders != null) {
+						orders.add(tmpInfos.get(i + 1) + "," + tmpInfos.get(i));
+					}
 					tmpInfos.remove(i + 1);
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos, orders);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -48,8 +58,11 @@ public class MahjHandlerUtil {
 
 				if (tmpGodCount > 0 && tmpInfos.get(i) != tmpInfos.get(i + 1)) {
 					tmpGodCount -= 1;
+					if (orders != null) {
+						orders.add(tmpInfos.get(i) + ",G");
+					}
 					tmpInfos.remove(i);
-					int needGodCount = getNeedGodCount(godIndex, tmpInfos);
+					int needGodCount = getNeedGodCount(godIndex, tmpInfos, orders);
 					if (needGodCount <= tmpGodCount) {
 						return true;
 					} else {
@@ -65,24 +78,24 @@ public class MahjHandlerUtil {
 		return false;
 	}
 
-	public static int getNeedGodCount(int godIndex, final ArrayList<Integer> infos) {
+	public static int getNeedGodCount(int godIndex, final ArrayList<Integer> infos, ArrayList<String> orders) {
 		if (infos == null || infos.size() <= 0) {
 			return 0;
 		}
 
 		if (MahjUtil.getMahjColr(infos.get(0)) > 2) {
-			return getNeedGodCountByFeng(godIndex, infos);
+			return getNeedGodCountByFeng(godIndex, infos, orders);
 		}
 
-		return getNeedGodCountByCommon(infos);
+		return getNeedGodCountByCommon(infos, orders);
 	}
 
-	private static int getNeedGodCountByCommon(final ArrayList<Integer> infos) {
+	private static int getNeedGodCountByCommon(final ArrayList<Integer> infos, ArrayList<String> orders) {
 		int needGodCount = 0;
 		int infoSize = infos.size();
 		/** LOG--DEBUG--BEGIN-- **/
 		if (DEBUG) {
-			System.out.print("getNeedGodCountByCommon--infos.size=" + infoSize + ":" + infos.toString() + "\n");
+			System.out.print("getNeedGodCountByCommon--infos.size=" + infoSize + ":" + infos.toString() + ",orders:" + orders + "\n");
 		}
 		/** LOG--DEBUG--END--- **/
 		if (infoSize <= 0) {
@@ -91,12 +104,22 @@ public class MahjHandlerUtil {
 			 */
 		} else if (infoSize == 1) {
 			needGodCount += 2;
+			if (orders != null) {
+				orders.add(infos.get(0) + ",G,G");
+			}
 			infos.removeAll(infos);
 		} else if (infoSize == 2) {
 			if (infos.get(0) - infos.get(1) <= 2) {
 				needGodCount += 1;
+				if (orders != null) {
+					orders.add(infos.get(0) + "," + infos.get(1) + ",G");
+				}
 			} else {
 				needGodCount += 4;
+				if (orders != null) {
+					orders.add(infos.get(1) + ",G,G");
+					orders.add(infos.get(0) + ",G,G");
+				}
 			}
 			infos.removeAll(infos);
 		} else {
@@ -116,6 +139,9 @@ public class MahjHandlerUtil {
 				}
 				// 可以成为一组时，做连续处理
 				if ((i + 1) < infoSize && is3Combine(v0, v1, infos.get(i + 1))) {
+					if (orders != null) {
+						orders.add(infos.get(i + 1) + "," + infos.get(i) + "," + infos.get(0));
+					}
 					infos.remove(i + 1);
 					infos.remove(i);
 					infos.remove(0);
@@ -124,7 +150,7 @@ public class MahjHandlerUtil {
 						System.out.print("getNeedGodCountByCommon--连续**移除 0, " + i + ", " + (i + 1) + "\n");
 					}
 					/** LOG--DEBUG--END-- **/
-					needGodCount += getNeedGodCountByCommon(infos);
+					needGodCount += getNeedGodCountByCommon(infos, orders);
 					break;
 				}
 			}
@@ -142,6 +168,10 @@ public class MahjHandlerUtil {
 					continue;
 				}
 
+				needGodCount += 1;
+				if (orders != null) {
+					orders.add(infos.get(i) + "," + infos.get(0) + ",G");
+				}
 				infos.remove(i);
 				infos.remove(0);
 				/** LOG--DEBUG--BEGIN-- **/
@@ -149,33 +179,35 @@ public class MahjHandlerUtil {
 					System.out.print("getNeedGodCountByCommon--差一个**移除 0, " + i + ", need : " + 1 + "\n");
 				}
 				/** LOG--DEBUG--END-- **/
-				needGodCount += 1;
-				needGodCount += getNeedGodCountByCommon(infos);
+				needGodCount += getNeedGodCountByCommon(infos, orders);
 				break;
 			}
 
 			// 只有一张散的，需要两张王牌
 			if (infos.size() > 0) {
+				needGodCount += 2;
+				if (orders != null) {
+					orders.add(infos.get(0) + ",G,G");
+				}
 				infos.remove(0);
 				/** LOG--DEBUG--BEGIN-- **/
 				if (DEBUG) {
 					System.out.print("getNeedGodCountByCommon--只有一个**移除 0, need : 2" + "\n");
 				}
 				/** LOG--DEBUG--END-- **/
-				needGodCount += 2;
-				needGodCount += getNeedGodCountByCommon(infos);
+				needGodCount += getNeedGodCountByCommon(infos, orders);
 			}
 		}
 
 		return needGodCount;
 	}
 
-	private static int getNeedGodCountByFeng(int godIndex, final ArrayList<Integer> infos) {
+	private static int getNeedGodCountByFeng(int godIndex, final ArrayList<Integer> infos, ArrayList<String> orders) {
 		int needGodCount = 0;
 		int infoSize = infos.size();
 		/** LOG--DEBUG--BEGIN-- **/
 		if (DEBUG) {
-			System.out.print("getNeedGodCountByFeng--infos.size=" + infoSize + ":" + infos.toString() + "\n");
+			System.out.print("getNeedGodCountByFeng--infos.size=" + infoSize + ":" + infos.toString() + ",orders:" + orders + "\n");
 		}
 		/** LOG--DEBUG--END--- **/
 		if (infoSize <= 0) {
@@ -184,18 +216,31 @@ public class MahjHandlerUtil {
 			 */
 		} else if (infoSize == 1) {
 			needGodCount += 2;
+			if (orders != null) {
+				orders.add(infos.get(0) + ",G,G");
+			}
 			infos.removeAll(infos);
 		} else if (infoSize == 2) {
 			if (infos.get(0) == infos.get(1)) {
 				needGodCount += 1;
+				if (orders != null) {
+					orders.add(infos.get(1) + "," + infos.get(0) + ",G");
+				}
 			} else if (MahjUtil.getMahjColr(infos.get(0)) == MahjUtil.getMahjColr(godIndex)
 					&& infos.get(0) != godIndex && infos.get(1) != godIndex) {
 				/**
 				 * 赖子刚好可以跟麻将配成三个不同的，比如 GOD:西 infos:东,南
 				 */
 				needGodCount += 1;
+				if (orders != null) {
+					orders.add(infos.get(1) + "," + infos.get(0) + ",G");
+				}
 			} else {
 				needGodCount += 4;
+				if (orders != null) {
+					orders.add(infos.get(1) + ",G,G");
+					orders.add(infos.get(0) + ",G,G");
+				}
 			}
 			infos.removeAll(infos);
 		} else {
@@ -219,11 +264,16 @@ public class MahjHandlerUtil {
 				}
 
 				if (continuedLists.size() >= 3) {
+					String order = "";
 					for (int i = 0; i < 3; i++) {
 						int index = continuedLists.get(i);
+						order = order + infos.get(index) + ",";
 						infos.remove(index);
 					}
-					needGodCount += getNeedGodCountByFeng(godIndex, infos);
+					if (orders != null) {
+						orders.add(order);
+					}
+					needGodCount += getNeedGodCountByFeng(godIndex, infos, orders);
 				}
 			}
 
@@ -232,20 +282,28 @@ public class MahjHandlerUtil {
 			collatedList = getCollatedListByFeng(infos);
 			ArrayList<Integer> continuedList = getContinuedListByFeng(collatedList);
 			if (continuedList.size() >= 3) {
+				String order = "";
 				for (int i = 0; i < 3; i++) {
 					int index = continuedList.get(i);
+					order = order + infos.get(index) + ",";
 					infos.remove(index);
 				}
-				needGodCount += getNeedGodCountByFeng(godIndex, infos);
+				if (orders != null) {
+					orders.add(order);
+				}
+				needGodCount += getNeedGodCountByFeng(godIndex, infos, orders);
 			}
 
 			// 有三个相同的可以成为一组，四个相同的取三个
 			for (int i = 0; i < infos.size() - 2; i++) {
 				if (infos.get(i) == infos.get(i + 1) && infos.get(i) == infos.get(i + 2)) {
+					if (orders != null) {
+						orders.add(infos.get(i + 2) + "," + infos.get(i + 1) + "," + infos.get(i));
+					}
 					infos.remove(i + 2);
 					infos.remove(i + 1);
 					infos.remove(i);
-					needGodCount += getNeedGodCountByFeng(godIndex, infos);
+					needGodCount += getNeedGodCountByFeng(godIndex, infos, orders);
 					break;
 				}
 			}
@@ -257,7 +315,9 @@ public class MahjHandlerUtil {
 					continue;
 				}
 
-				if (collatedList.get(face).size() == 1 || collatedList.get(face).size() == 4) {
+				if (collatedList.get(face).size() == 1) {
+					needGodCount += 2;
+				} else if (collatedList.get(face).size() == 4) {
 					needGodCount += 2;
 				} else if (collatedList.get(face).size() == 2) {
 					needGodCount += 1;

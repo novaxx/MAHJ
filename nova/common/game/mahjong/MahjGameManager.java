@@ -11,11 +11,13 @@ import nova.common.game.mahjong.MahjGameStage.StageCallBack;
 import nova.common.game.mahjong.data.MahjData;
 import nova.common.game.mahjong.data.MahjGameData;
 import nova.common.game.mahjong.data.MahjResponeData;
+import nova.common.game.mahjong.data.MahjResultData;
 import nova.common.game.mahjong.handler.FileRecorderManager;
 import nova.common.game.mahjong.handler.GameLogger;
 import nova.common.game.mahjong.handler.MahjGameDispatcher;
 import nova.common.game.mahjong.handler.MahjGameHandler;
 import nova.common.game.mahjong.util.MahjConstant;
+import nova.common.game.mahjong.util.MahjResultUtil;
 import nova.common.room.RoomController;
 import nova.common.room.data.PlayerInfo;
 
@@ -67,6 +69,7 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 			
 		case MahjGameStage.MAHJ_END:
 			pauseGame();
+			handleGameResult();
 			break;
 
 		default:
@@ -355,6 +358,30 @@ public class MahjGameManager extends GameManager implements StageCallBack, MahjG
 		}
 		// 写信息到文件
 		printMessageToFile("player : " + mGameData.getCurrent() + " matched " + matchType);
+	}
+	
+	private void handleGameResult() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				HashMap<Integer, MahjResultData> results = new HashMap<Integer, MahjResultData>();
+				if (mGameData.getWinner() >= 0 && mGameData.getWinner() <= 4) {
+					results = MahjResultUtil.getResultForGroupDatas(mMahjManager.getPlayerDatas(), mGameData.getWinner());
+					HashMap<Integer, Integer> balance = new HashMap<Integer, Integer>();
+					for (int i = 0; i < 4; i++) {
+						balance.put(i, results.get(i).getBalance());
+					}
+					mGameHandler.handleResult(mRoomId, balance);
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				mHandler.handleGameResult(mRoomId, results);
+			}
+		}).start();
 	}
 
 	private void updateMatchData(int playerId, int matchType) {

@@ -24,6 +24,8 @@ public class MahjGameCommand {
 	
 	// 游戏信息变化
 	public static final int RESPONE_GAME_INFO_UPDATE = 1250;
+	// 游戏结果处理
+	public static final int RESPONE_GAME_RESULT = 1251;
 	// 玩家信息变化
 	public static final int RESPONE_PLAYER_INFO_UPDATE = 1260;
 	// 房间信息变化
@@ -48,5 +50,40 @@ public class MahjGameCommand {
 		public static final int ROOM_STATE_FAIL = -1;
 		public static final int ROOM_STATE_JOIN = 1;
 		public static final int ROOM_STATE_GAME_START = 2;
+	}
+	
+	public static class FanType {
+		public static final int TYPE_HU = 0;
+		public static final int TYPE_ZIMO = 1;
+		public static final int TYPE_GANG = 2;
+		public static final int TYPE_FENG = 3;
+		public static final int TYPE_DIAOJIAN = 4;
+		public static final int TYPE_QINGYISE = 5;
+		public static final int TYPE_YITIAOLONG = 6;
+		public static final int TYPE_MENQIANQIN = 7;
+		public static final int TYPE_QIDUI = 8;
+		public static final int TYPE_SIGAN = 9;
+		public static final int TYPE_LIANQIDUI = 10;
+		public static final int TYPE_DASANYUAN = 11;
+		public static final int TYPE_DASIXI = 12;
+		public static final int TYPE_TIANHU = 13;
+		public static final int TYPE_SIFANDAFA = 14;
+		public static final String[] FAN_DISPLAY_TYPE = {
+				"胡",                   //0
+				"自摸",              //1
+				"杆",                  //2
+				"风",                  //3
+				"吊将",             //4
+				"清一色",        //5
+				"一条龙",        //6
+				"门清",            //7
+				"七对",            //8
+				"十八学士",    //9
+				"连七对",        //10
+				"大三元",        //11
+				"大四喜",        //12
+				"天胡",             //13
+				"四方大发",    //14
+		};
 	}
 }

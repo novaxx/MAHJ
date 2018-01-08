@@ -11,7 +11,7 @@ public class GameManager {
 	public static final int GAME_STATE_RESUME = 3;
 	private int mGameState;
 	protected int mRoomId;
-	private GameHandler mHandler;
+	protected GameHandler mGameHandler;
 	
 	public static GameManager createManager(int roomId, GameHandler handler, int gameType) {
 		GameManager manager;
@@ -35,7 +35,7 @@ public class GameManager {
 	}
 	
 	public void setGameHandler(GameHandler handler) {
-		mHandler = handler;
+		mGameHandler = handler;
 	}
 	
 	public boolean isGameRunning() {
@@ -43,8 +43,8 @@ public class GameManager {
 	}
 	
 	public void startGame() {
-		if (mHandler != null) {
-			mHandler.start();
+		if (mGameHandler != null) {
+			mGameHandler.start(mRoomId);
 		}
 		mGameState = GAME_STATE_START;
 	}
@@ -54,15 +54,15 @@ public class GameManager {
 	}
 	
 	public void stopGame() {
-		if (isGameRunning() && mHandler != null) {
-			mHandler.end(mRoomId, getWinner());
+		if (mGameHandler != null) {
+			mGameHandler.end(mRoomId);
 		}
 		mGameState = GAME_STATE_INIT;
 	}
 	
 	public void pauseGame() {
-		if (isGameRunning() && mHandler != null) {
-			mHandler.end(mRoomId, getWinner());
+		if (mGameHandler != null) {
+			mGameHandler.end(mRoomId);
 		}
 		mGameState = GAME_STATE_PAUSE;
 	}

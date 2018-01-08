@@ -36,6 +36,10 @@ public class MahjGroupData {
 		mGodIndex = index;
 		updateGroupData();
 	}
+	
+	public int getGodIndex() {
+		return mGodIndex;
+	}
 
 	public void addMatchData(MahjData data, int matchType) {
 		if (matchType != MahjConstant.MAHJ_MATCH_CHI && matchType != MahjConstant.MAHJ_MATCH_PENG
@@ -298,6 +302,57 @@ public class MahjGroupData {
 		}
 		return false;
 	}
+	
+	public ArrayList<ArrayList<String>> getHuList() {
+		ArrayList<ArrayList<String>> huList = new ArrayList<ArrayList<String>>();
+		final int godCount = mUnitDatas.get(GROUP_ID_MAX) != null ? mUnitDatas.get(GROUP_ID_MAX).size() : 0;
+		for (int jiang = 0; jiang < GROUP_ID_MAX; jiang++) {
+			ArrayList<String> orders = new ArrayList<String>();
+			if (mUnitDatas.get(jiang) == null || mUnitDatas.get(jiang).size() <= 0) {
+				continue;
+			}
+			
+			updateOrderForMatchDatas(orders);
+			
+			int needGodCount = 0;
+			for (int i = 0; i < GROUP_ID_MAX; i++) {
+				if (i == jiang) {
+					continue;
+				}
+				if (mUnitDatas.get(i) == null || mUnitDatas.get(i).size() <= 0) {
+					continue;
+				}
+
+				needGodCount += getNeedGodCountForUnitData(mUnitDatas.get(i), orders);
+				if (godCount < needGodCount) {
+					break;
+				}
+			}
+			boolean isHu = MahjHandlerUtil.isHuEnable(mUnitDatas.get(jiang).getIndexs(), mGodIndex, godCount - needGodCount, orders);
+			if (isHu) {
+				huList.add(orders);
+			}
+		}
+		return huList;
+	}
+	
+	private void updateOrderForMatchDatas(ArrayList<String> orders) {
+		int index = -1;
+		String order = "";
+		for (MahjData data : mMatchDatas) {
+			if (index == -1) {
+				index = data.getIndex();
+				order = order + index + ",";
+			} else if (index != data.getIndex()) {
+				orders.add(order);
+				index = data.getIndex();
+				order = index + ",";
+			} else {
+				order = order + index + ",";
+			}
+		}
+		orders.add(order);
+	}
 
 	/*
 	 * 计算所有普通麻将(不包括风)的组数，用于需要缺门的麻将规则
@@ -313,7 +368,11 @@ public class MahjGroupData {
 	}
 
 	private int getNeedGodCountForUnitData(MahjUnitData data) {
-		return MahjHandlerUtil.getNeedGodCount(mGodIndex, data.getIndexs());
+		return MahjHandlerUtil.getNeedGodCount(mGodIndex, data.getIndexs(), null);
+	}
+	
+	private int getNeedGodCountForUnitData(MahjUnitData data, ArrayList<String> orders) {
+		return MahjHandlerUtil.getNeedGodCount(mGodIndex, data.getIndexs(), orders);
 	}
 
 	/*
